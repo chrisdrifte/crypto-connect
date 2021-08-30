@@ -1,0 +1,25 @@
+{
+  "name": "@crypto-connect/coinbase-pro",
+  "version": "0.0.1",
+  "description": "Connect to Coinbase Pro API",
+  "author": "chrisdrifte <chrisdrifte@gmail.com>",
+  "license": "ISC",
+  "main": "dist/coinbase-pro.js",
+  "directories": {
+    "src": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rm -rf dist/* && tsc"
+  },
+  "dependencies": {
+    "@crypto-connect/common": "^0.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^16.7.6",
+    "typescript": "^4.4.2"
+  }
+}

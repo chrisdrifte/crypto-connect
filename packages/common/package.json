@@ -1,0 +1,23 @@
+{
+  "name": "@crypto-connect/common",
+  "version": "0.0.1",
+  "description": "CryptoConnect common files",
+  "author": "chrisdrifte <chrisdrifte@gmail.com>",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "directories": {
+    "src": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rm -rf dist/* && tsc"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^16.7.6",
+    "typescript": "^4.4.2"
+  }
+}
