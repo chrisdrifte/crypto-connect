@@ -19,7 +19,7 @@ async function getCoinbaseBalances(apiKey: string, apiSecret: string) {
   });
 
   // Check credentials
-  coinbase.throwErrorOnBadCredentials();
+  coinbase.throwErrorOnInvalidPermissions();
 
   // Get balances
   const balances = coinbase.getBalances();

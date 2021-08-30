@@ -13,6 +13,7 @@ import {
   BadResponseError,
 } from "@crypto-connect/errors";
 
+const REQUIRED_SCOPES = ["wallet:accounts:read"];
 const BASE_URL = "https://api.coinbase.com";
 const ENDPOINTS = {
   permissions: `${BASE_URL}/v2/user/auth`,
@@ -50,14 +51,29 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<{
     return this;
   }
 
-  async checkPermissions(): Promise<void> {
+  async throwErrorOnInvalidPermissions(): Promise<void> {
     const url = ENDPOINTS.permissions;
-    const permissions = this.currentAuth.request(url);
+    const permissions = await this.currentAuth.request<{ scopes: string[] }>(
+      url,
+    );
 
-    // @TODO
+    const requiredScopes = REQUIRED_SCOPES;
+    const grantedScopes = permissions.scopes;
 
-    if (!permissions) {
+    const missingScopes = requiredScopes.filter(
+      (requiredScope) => !grantedScopes.includes(requiredScope),
+    );
+    const extraScopes = grantedScopes.filter(
+      (grantedScope) => !requiredScopes.includes(grantedScope),
+    );
+
+    if (missingScopes.length) {
+      console.error(`Insufficient permissions: add ${missingScopes}`);
       throw new NotAuthorizedError();
+    }
+
+    if (extraScopes.length) {
+      console.warn(`Superfluous permissions: remove ${extraScopes}`);
     }
   }
 
