@@ -4,6 +4,13 @@ import {
   readCredentialsFile,
 } from "@crypto-connect/common";
 
+/**
+ * Coinbase
+ *
+ * @group coinbase
+ * @group integration
+ */
+
 // Read keys from file
 const [apiKey, apiSecret] = readCredentialsFile(`${__dirname}/.keys`);
 
