@@ -13,8 +13,8 @@
     "boot": "yarn global add lerna && lerna bootstrap",
     "start": "lerna exec yarn start",
     "lint": "eslint ./packages --ext .ts,.tsx",
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "test": "yarn build && jest",
+    "test:watch": "yarn build && jest --watch",
     "build": "lerna run build --stream"
   },
   "devDependencies": {
