@@ -16,7 +16,8 @@
     "build": "rm -rf dist/* && tsc"
   },
   "dependencies": {
-    "@crypto-connect/common": "^0.0.1"
+    "@crypto-connect/common": "^0.0.1",
+    "@crypto-connect/errors": "^0.0.1"
   },
   "devDependencies": {
     "@types/node": "^16.7.6",

@@ -1,7 +1,7 @@
 {
-  "name": "@crypto-connect/coinbase-pro",
+  "name": "@crypto-connect/errors",
   "version": "0.0.1",
-  "description": "Connect to Coinbase Pro API",
+  "description": "CryptoConnect custom errors",
   "author": "chrisdrifte <chrisdrifte@gmail.com>",
   "license": "ISC",
   "main": "dist/index.js",
@@ -15,10 +15,7 @@
   "scripts": {
     "build": "rm -rf dist/* && tsc"
   },
-  "dependencies": {
-    "@crypto-connect/common": "^0.0.1",
-    "@crypto-connect/errors": "^0.0.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^16.7.6",
     "typescript": "^4.4.2"

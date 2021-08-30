@@ -1,12 +1,11 @@
 import * as crypto from "crypto";
 import { CoinbaseRequestBody } from "./coinbase-types";
+import { NoCredentialsError, ServerError } from "@crypto-connect/errors";
 import {
   APIKeys,
-  NoCredentialsError,
   RequestHandlerOptions,
   RequestUrl,
   ResponseData,
-  ServerError,
 } from "@crypto-connect/common";
 
 export class CoinbaseAPIKeys extends APIKeys {

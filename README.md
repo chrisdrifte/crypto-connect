@@ -13,3 +13,7 @@ easy to use API.
 ## Usage
 
 Follow links in the table above.
+
+## Error Handling
+
+Error handling is consistent across all packages, via [custom errors](packages/errors).

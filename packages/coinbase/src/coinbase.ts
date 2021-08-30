@@ -6,10 +6,12 @@ import {
   Balances,
   BaseConnectionSecure,
   BaseConnectionContext,
+} from "@crypto-connect/common";
+import {
   ClientError,
   NotAuthorizedError,
   BadResponseError,
-} from "@crypto-connect/common";
+} from "@crypto-connect/errors";
 
 const BASE_URL = "https://api.coinbase.com";
 const ENDPOINTS = {

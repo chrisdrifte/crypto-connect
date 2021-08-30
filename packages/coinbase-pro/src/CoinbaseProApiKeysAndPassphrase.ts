@@ -1,8 +1,8 @@
 import crypto from "crypto";
 import { CoinbaseProRequestBody } from "./coinbase-pro-types";
+import { NoCredentialsError } from "@crypto-connect/errors";
 import {
   AuthMethod,
-  NoCredentialsError,
   RequestHandlerOptions,
   RequestUrl,
   ResponseData,

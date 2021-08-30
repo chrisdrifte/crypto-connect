@@ -1,6 +1,5 @@
 import { AuthMethod } from "../AuthMethod";
-import { NoCredentialsError } from "../../Errors/NoCredentialsError";
-import { NotAuthorizedError } from "../../Errors/NotAuthorizedError";
+import { NoCredentialsError, NotAuthorizedError } from "@crypto-connect/errors";
 import {
   Credentials,
   RequestHandlerOptions,
