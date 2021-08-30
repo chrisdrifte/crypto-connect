@@ -1,5 +1,10 @@
 import { AuthMethod } from "../AuthMethod";
-import { Credentials, ResponseData } from "../../types";
+import {
+  Credentials,
+  RequestHandlerOptions,
+  RequestUrl,
+  ResponseData,
+} from "../../types";
 
 interface OAuthCredentials extends Credentials {
   clientId: string;
@@ -157,10 +162,8 @@ export abstract class OAuth
   }
 
   async request<TResult extends ResponseData>(
-    method: string,
-    url: string,
-    headers: any = [],
-    body: any = "",
+    url: RequestUrl,
+    { method = "GET", headers = {}, body = "" }: RequestHandlerOptions = {},
   ): Promise<TResult> {
     if (typeof this.credentials === "undefined") {
       throw new Error("You must provide credentials first");
@@ -179,7 +182,7 @@ export abstract class OAuth
 
     // if the token has expired, refresh and try again
     await this.exchangeRefreshToken();
-    await this.request(method, url, headers, body);
+    await this.request(url, { method, headers, body });
 
     return {} as TResult;
   }

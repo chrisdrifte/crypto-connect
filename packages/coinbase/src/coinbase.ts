@@ -49,7 +49,7 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<{
 
   async checkPermissions(): Promise<void> {
     const url = CoinbaseConnectionSecure.endpoints.permissions;
-    const permissions = this.currentAuth.request("GET", url);
+    const permissions = this.currentAuth.request(url);
 
     // @TODO
 
@@ -64,7 +64,7 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<{
     while (endpoint !== null) {
       const result = await this.currentAuth.request<
         CoinbasePaginatedResource<TItem>
-      >("GET", endpoint);
+      >(endpoint);
 
       // handle errors
       if (!result) {

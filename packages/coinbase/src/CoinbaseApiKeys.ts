@@ -1,6 +1,11 @@
 import * as crypto from "crypto";
-import { APIKeys, ResponseData } from "@crypto-connect/common";
 import { CoinbaseRequestBody } from "./coinbase-types";
+import {
+  APIKeys,
+  RequestHandlerOptions,
+  RequestUrl,
+  ResponseData,
+} from "@crypto-connect/common";
 
 export class CoinbaseAPIKeys extends APIKeys {
   /**
@@ -50,8 +55,8 @@ export class CoinbaseAPIKeys extends APIKeys {
   }
 
   async request<TResult extends ResponseData>(
-    method: string,
-    url: string,
+    url: RequestUrl,
+    { method = "GET" }: RequestHandlerOptions = {},
   ): Promise<TResult> {
     // check that we have config
     if (typeof this.credentials === "undefined") {

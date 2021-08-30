@@ -16,13 +16,16 @@ export type RequestBody = Record<string, string> | string;
 
 export type RequestHandler = (
   url: RequestUrl,
-  options?: {
-    method?: RequestMethod;
-    headers?: RequestHeaders;
-    body?: RequestBody;
-  },
+  options?: RequestHandlerOptions,
 ) => Promise<Response>;
 
+export type RequestHandlerOptions =
+  | {
+      method?: RequestMethod;
+      headers?: RequestHeaders;
+      body?: RequestBody;
+    }
+  | undefined;
 export type ResponseStatus = number;
 export type ResponseHeaders = Record<string, string | string[] | undefined>;
 export type ResponseData = Record<string, unknown> | unknown[];
