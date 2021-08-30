@@ -6,6 +6,9 @@ import {
   Balances,
   BaseConnectionSecure,
   BaseConnectionContext,
+  ClientError,
+  NotAuthorizedError,
+  BadResponseError,
 } from "@crypto-connect/common";
 
 const BASE_URL = "https://api.coinbase.com";
@@ -54,7 +57,7 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<{
     // @TODO
 
     if (!permissions) {
-      throw new Error("Not allowed");
+      throw new NotAuthorizedError();
     }
   }
 
@@ -67,12 +70,8 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<{
       >(endpoint);
 
       // handle errors
-      if (!result) {
-        throw new Error("Invalid result");
-      }
-
-      if (typeof result.data === "undefined") {
-        throw new Error("Coinbase API result has no data");
+      if (!result || typeof result.data === "undefined") {
+        throw new BadResponseError();
       }
 
       // Help devs notice warnings
@@ -82,8 +81,12 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<{
       }
 
       if (!(result.data instanceof Array)) {
-        console.error(result.data.errors);
-        throw new Error("API result has errors");
+        if (result.data.errors instanceof Array) {
+          console.error(result.data.errors);
+          throw new ClientError(result.data.errors[0].message);
+        }
+
+        throw new BadResponseError();
       }
 
       // add data to list of items

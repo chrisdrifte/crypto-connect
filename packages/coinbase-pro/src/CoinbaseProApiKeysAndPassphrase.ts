@@ -1,6 +1,10 @@
 import crypto from "crypto";
-import { AuthMethod, ResponseData } from "@crypto-connect/common";
 import { CoinbaseProRequestBody } from "./coinbase-pro-types";
+import {
+  AuthMethod,
+  NoCredentialsError,
+  ResponseData,
+} from "@crypto-connect/common";
 
 export class CoinbaseProApiKeysAndPassphrase extends AuthMethod<{
   apiKey: string;
@@ -61,10 +65,7 @@ export class CoinbaseProApiKeysAndPassphrase extends AuthMethod<{
     url: string,
     data: CoinbaseProRequestBody = "",
   ): Promise<TResult> {
-    // check that we have config
-    if (typeof this.credentials === "undefined") {
-      throw new Error("You must provide credentials first");
-    }
+    if (typeof this.credentials === "undefined") throw new NoCredentialsError();
 
     const { requestHandler } = this.context;
     const { apiKey, apiSecret, passphrase } = this.credentials;

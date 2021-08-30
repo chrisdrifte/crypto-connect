@@ -1,4 +1,6 @@
 import { AuthMethod } from "../AuthMethod";
+import { NoCredentialsError } from "../../Errors/NoCredentialsError";
+import { NotAuthorizedError } from "../../Errors/NotAuthorizedError";
 import {
   Credentials,
   RequestHandlerOptions,
@@ -45,10 +47,7 @@ export abstract class OAuth
   // so we should be able to keep most of the logic here and
   // use it to handle OAuth for all integrations that implement it
   signIn(redirectUri: string, scope?: string[], state?: string): string {
-    // check that we have config
-    if (typeof this.credentials === "undefined") {
-      throw new Error("You must provide credentials first");
-    }
+    if (typeof this.credentials === "undefined") throw new NoCredentialsError();
 
     const { authorizeUrl } = this.endpoints;
     const { clientId } = this.credentials;
@@ -71,10 +70,7 @@ export abstract class OAuth
   }
 
   async exchangeCode(redirectUri: string, code: string): Promise<void> {
-    // check that we have config
-    if (typeof this.credentials === "undefined") {
-      throw new Error("You must provide credentials first");
-    }
+    if (typeof this.credentials === "undefined") throw new NoCredentialsError();
 
     const { tokenUrl } = this.endpoints;
     const { clientId, clientSecret } = this.credentials;
@@ -105,10 +101,7 @@ export abstract class OAuth
   }
 
   async exchangeRefreshToken(): Promise<void> {
-    // check that we have config
-    if (typeof this.credentials === "undefined") {
-      throw new Error("You must provide credentials first");
-    }
+    if (typeof this.credentials === "undefined") throw new NoCredentialsError();
 
     const { tokenUrl } = this.endpoints;
     const { clientId, clientSecret } = this.credentials;
@@ -140,10 +133,7 @@ export abstract class OAuth
   }
 
   async revoke(): Promise<void> {
-    // check that we have config
-    if (typeof this.credentials === "undefined") {
-      throw new Error("You must provide credentials first");
-    }
+    if (typeof this.credentials === "undefined") throw new NoCredentialsError();
 
     const { revokeUrl } = this.endpoints;
 
@@ -165,15 +155,13 @@ export abstract class OAuth
     url: RequestUrl,
     { method = "GET", headers = {}, body = "" }: RequestHandlerOptions = {},
   ): Promise<TResult> {
-    if (typeof this.credentials === "undefined") {
-      throw new Error("You must provide credentials first");
-    }
+    if (typeof this.credentials === "undefined") throw new NoCredentialsError();
 
     const { accessToken } = await this.credentials.getTokensHandler();
 
     // check that we have config
     if (typeof accessToken === "undefined") {
-      throw new Error("You must authenticate first");
+      throw new NotAuthorizedError();
     }
 
     // code to make request, eg:

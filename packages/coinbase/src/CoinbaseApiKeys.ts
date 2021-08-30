@@ -2,9 +2,11 @@ import * as crypto from "crypto";
 import { CoinbaseRequestBody } from "./coinbase-types";
 import {
   APIKeys,
+  NoCredentialsError,
   RequestHandlerOptions,
   RequestUrl,
   ResponseData,
+  ServerError,
 } from "@crypto-connect/common";
 
 export class CoinbaseAPIKeys extends APIKeys {
@@ -58,10 +60,7 @@ export class CoinbaseAPIKeys extends APIKeys {
     url: RequestUrl,
     { method = "GET" }: RequestHandlerOptions = {},
   ): Promise<TResult> {
-    // check that we have config
-    if (typeof this.credentials === "undefined") {
-      throw new Error("You must provide credentials first");
-    }
+    if (typeof this.credentials === "undefined") throw new NoCredentialsError();
 
     const { apiKey, apiSecret } = this.credentials;
     const { requestHandler } = this.context;
@@ -81,7 +80,10 @@ export class CoinbaseAPIKeys extends APIKeys {
 
     if (response.status !== 200) {
       console.error(response.data);
-      throw new Error(`API responded with status ${response.status}`);
+      throw new ServerError(
+        response.status || 0,
+        JSON.stringify(response.data),
+      );
     }
 
     return response.data as TResult;
