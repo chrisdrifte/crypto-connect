@@ -15,6 +15,7 @@
     "lint": "eslint ./packages --ext .ts,.tsx",
     "test": "yarn build && jest",
     "test:watch": "yarn build && jest --watch",
+    "prepare": "husky install",
     "build": "lerna run build --stream"
   },
   "devDependencies": {
