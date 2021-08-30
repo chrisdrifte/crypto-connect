@@ -8,14 +8,13 @@ import {
 } from "@crypto-connect/common";
 
 const BASE_URL = "https://api.pro.coinbase.com";
+const ENDPOINTS = {
+  accounts: `${BASE_URL}/accounts`,
+};
 
 class CoinbaseProConnectionSecure extends BaseConnectionSecure<{
   apiKeys: CoinbaseProApiKeysAndPassphrase;
 }> {
-  endpoints = {
-    accounts: `${BASE_URL}/accounts`,
-  };
-
   auth = {
     apiKeys: new CoinbaseProApiKeysAndPassphrase(this.context),
   };
@@ -34,10 +33,8 @@ class CoinbaseProConnectionSecure extends BaseConnectionSecure<{
   }
 
   async getAccounts(): Promise<CoinbaseProAccount[]> {
-    let accounts = await this.auth.apiKeys.request<CoinbaseProAccount[]>(
-      "GET",
-      this.endpoints.accounts,
-    );
+    const url = ENDPOINTS.accounts;
+    let accounts = await this.auth.apiKeys.request<CoinbaseProAccount[]>(url);
 
     if (!(accounts instanceof Array)) {
       accounts = [];

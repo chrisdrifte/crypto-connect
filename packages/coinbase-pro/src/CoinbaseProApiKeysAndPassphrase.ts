@@ -3,6 +3,8 @@ import { CoinbaseProRequestBody } from "./coinbase-pro-types";
 import {
   AuthMethod,
   NoCredentialsError,
+  RequestHandlerOptions,
+  RequestUrl,
   ResponseData,
 } from "@crypto-connect/common";
 
@@ -61,9 +63,8 @@ export class CoinbaseProApiKeysAndPassphrase extends AuthMethod<{
    * Handle a request
    */
   async request<TResult extends ResponseData>(
-    method: string,
-    url: string,
-    data: CoinbaseProRequestBody = "",
+    url: RequestUrl,
+    { method = "GET", body = "" }: RequestHandlerOptions = {},
   ): Promise<TResult> {
     if (typeof this.credentials === "undefined") throw new NoCredentialsError();
 
@@ -75,7 +76,7 @@ export class CoinbaseProApiKeysAndPassphrase extends AuthMethod<{
       timestamp,
       method,
       url,
-      data,
+      body,
     );
     const signature = CoinbaseProApiKeysAndPassphrase.getSignature(
       message,
@@ -84,7 +85,7 @@ export class CoinbaseProApiKeysAndPassphrase extends AuthMethod<{
 
     const result = await requestHandler(url, {
       headers: {
-        "User-Agent": "TrueWorth",
+        "User-Agent": "CryptoConnect",
         "CB-ACCESS-KEY": apiKey,
         "CB-ACCESS-SIGN": signature,
         "CB-ACCESS-TIMESTAMP": timestamp,

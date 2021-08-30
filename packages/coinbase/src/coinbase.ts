@@ -21,8 +21,6 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<{
   apiKeys: CoinbaseAPIKeys;
   oauth: CoinbaseOAuth;
 }> {
-  static endpoints = ENDPOINTS;
-
   auth = {
     apiKeys: new CoinbaseAPIKeys(this.context),
     oauth: new CoinbaseOAuth(this.context),
@@ -51,7 +49,7 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<{
   }
 
   async checkPermissions(): Promise<void> {
-    const url = CoinbaseConnectionSecure.endpoints.permissions;
+    const url = ENDPOINTS.permissions;
     const permissions = this.currentAuth.request(url);
 
     // @TODO
@@ -109,8 +107,8 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<{
   }
 
   async getAccounts(): Promise<CoinbaseAccount[]> {
-    const endpoint = CoinbaseConnectionSecure.endpoints.accounts;
-    const accounts = await this.getPaginatedResource<CoinbaseAccount>(endpoint);
+    const url = ENDPOINTS.accounts;
+    const accounts = await this.getPaginatedResource<CoinbaseAccount>(url);
 
     return accounts;
   }
