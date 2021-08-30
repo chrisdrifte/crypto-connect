@@ -3,7 +3,6 @@ import { CoinbaseProApiKeysAndPassphrase } from "./CoinbaseProApiKeysAndPassphra
 import {
   AuthMethodCredentials,
   Balances,
-  BaseConnectionContext,
   BaseConnectionSecure,
 } from "@crypto-connect/common";
 
@@ -18,10 +17,6 @@ class CoinbaseProConnectionSecure extends BaseConnectionSecure<{
   auth = {
     apiKeys: new CoinbaseProApiKeysAndPassphrase(this.context),
   };
-
-  constructor(public context: BaseConnectionContext) {
-    super();
-  }
 
   // provide a helper to set the credentials
   useApiKeysAndPassphrase(

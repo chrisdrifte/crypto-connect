@@ -5,7 +5,6 @@ import {
   AuthMethodCredentials,
   Balances,
   BaseConnectionSecure,
-  BaseConnectionContext,
 } from "@crypto-connect/common";
 import {
   ClientError,
@@ -51,11 +50,6 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<CoinbaseAuthMethods>
 
   // store the current auth method (whichever was last configured)
   currentAuth: CoinbaseAPIKeys | CoinbaseOAuth = this.auth.apiKeys;
-
-  // supply context with constructor
-  constructor(public context: BaseConnectionContext) {
-    super();
-  }
 
   /**
    * Use the `ApiKeys` auth method to authorize requests

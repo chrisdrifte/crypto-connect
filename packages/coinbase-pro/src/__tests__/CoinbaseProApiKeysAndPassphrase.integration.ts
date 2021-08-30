@@ -1,8 +1,5 @@
 import { CoinbasePro } from "../CoinbasePro";
-import {
-  nodeHttpsRequestHandler,
-  readCredentialsFile,
-} from "@crypto-connect/common";
+import { readCredentialsFile } from "@crypto-connect/common";
 
 /**
  * Coinbase Pro
@@ -17,9 +14,7 @@ const [apiKey, apiSecret, passphrase] = readCredentialsFile(
 );
 
 const setup = () => ({
-  coinbasePro: new CoinbasePro({
-    requestHandler: nodeHttpsRequestHandler,
-  }).useApiKeysAndPassphrase({
+  coinbasePro: new CoinbasePro().useApiKeysAndPassphrase({
     apiKey,
     apiSecret,
     passphrase,

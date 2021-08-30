@@ -74,9 +74,9 @@ export class CoinbaseAPIKeys extends APIKeys {
     // Execute the request
     const response = await requestHandler(url, {
       headers: {
-        "CB-ACCESS-SIGN": signature,
-        "CB-ACCESS-TIMESTAMP": timestamp,
-        "CB-ACCESS-KEY": apiKey,
+        "CB-ACCESS-SIGN": `${signature}`,
+        "CB-ACCESS-TIMESTAMP": `${timestamp}`,
+        "CB-ACCESS-KEY": `${apiKey}`,
         "CB-VERSION": "2015-07-22",
       },
     });

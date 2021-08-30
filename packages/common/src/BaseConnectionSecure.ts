@@ -1,11 +1,8 @@
 import { BaseConnection } from "./BaseConnection";
-import { BaseConnectionContext, BaseConnectionSecureInterface } from "./types";
+import { BaseConnectionSecureInterface } from "./types";
 
-export abstract class BaseConnectionSecure<
-    TAuth,
-    TContext = BaseConnectionContext,
-  >
-  extends BaseConnection<TContext>
+export abstract class BaseConnectionSecure<TAuth>
+  extends BaseConnection
   implements BaseConnectionSecureInterface<TAuth>
 {
   abstract auth: TAuth;

@@ -11,7 +11,7 @@ export type CryptoBalance = { id: string; asset: string; amount: string };
  */
 export type RequestMethod = string;
 export type RequestUrl = string;
-export type RequestHeaders = Record<string, number | string | string[]>;
+export type RequestHeaders = Record<string, string>;
 export type RequestBody = Record<string, string> | string;
 
 export type RequestHandler = (

@@ -86,10 +86,10 @@ export class CoinbaseProApiKeysAndPassphrase extends AuthMethod<{
     const result = await requestHandler(url, {
       headers: {
         "User-Agent": "CryptoConnect",
-        "CB-ACCESS-KEY": apiKey,
-        "CB-ACCESS-SIGN": signature,
-        "CB-ACCESS-TIMESTAMP": timestamp,
-        "CB-ACCESS-PASSPHRASE": passphrase,
+        "CB-ACCESS-KEY": `${apiKey}`,
+        "CB-ACCESS-SIGN": `${signature}`,
+        "CB-ACCESS-TIMESTAMP": `${timestamp}`,
+        "CB-ACCESS-PASSPHRASE": `${passphrase}`,
       },
     });
 

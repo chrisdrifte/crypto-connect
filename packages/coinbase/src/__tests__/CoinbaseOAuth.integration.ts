@@ -1,8 +1,5 @@
 import { Coinbase } from "../Coinbase";
-import {
-  nodeHttpsRequestHandler,
-  readCredentialsFile,
-} from "@crypto-connect/common";
+import { readCredentialsFile } from "@crypto-connect/common";
 
 /**
  * Coinbase
@@ -17,9 +14,7 @@ const [clientId, clientSecret, devToken] = readCredentialsFile(
 );
 
 const setup = () => ({
-  coinbase: new Coinbase({
-    requestHandler: nodeHttpsRequestHandler,
-  }).useOAuth({
+  coinbase: new Coinbase().useOAuth({
     clientId,
     clientSecret,
     getTokensHandler: () => {

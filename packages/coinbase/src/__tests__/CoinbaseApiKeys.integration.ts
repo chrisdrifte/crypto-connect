@@ -1,8 +1,5 @@
 import { Coinbase } from "../Coinbase";
-import {
-  nodeHttpsRequestHandler,
-  readCredentialsFile,
-} from "@crypto-connect/common";
+import { readCredentialsFile } from "@crypto-connect/common";
 
 /**
  * Coinbase
@@ -15,9 +12,7 @@ import {
 const [apiKey, apiSecret] = readCredentialsFile(`${__dirname}/.keys`);
 
 const setup = () => ({
-  coinbase: new Coinbase({
-    requestHandler: nodeHttpsRequestHandler,
-  }).useApiKeys({
+  coinbase: new Coinbase().useApiKeys({
     apiKey,
     apiSecret,
   }),
