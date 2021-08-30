@@ -13,17 +13,37 @@ import {
   BadResponseError,
 } from "@crypto-connect/errors";
 
+/**
+ * Array of scopes required to use this package
+ */
 const REQUIRED_SCOPES = ["wallet:accounts:read"];
+
+/**
+ * Coinbase API Base URL
+ */
 const BASE_URL = "https://api.coinbase.com";
+
+/**
+ * Coinbase Request Endpoints
+ */
 const ENDPOINTS = {
   permissions: `${BASE_URL}/v2/user/auth`,
   accounts: `${BASE_URL}/v2/accounts?limit=100`,
 };
 
-class CoinbaseConnectionSecure extends BaseConnectionSecure<{
+/**
+ * Coinbase API Auth Methods
+ */
+type CoinbaseAuthMethods = {
   apiKeys: CoinbaseAPIKeys;
   oauth: CoinbaseOAuth;
-}> {
+};
+
+/**
+ * Coinbase API Client
+ */
+class CoinbaseConnectionSecure extends BaseConnectionSecure<CoinbaseAuthMethods> {
+  // create auth method instances with context
   auth = {
     apiKeys: new CoinbaseAPIKeys(this.context),
     oauth: new CoinbaseOAuth(this.context),
@@ -32,11 +52,14 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<{
   // store the current auth method (whichever was last configured)
   currentAuth: CoinbaseAPIKeys | CoinbaseOAuth = this.auth.apiKeys;
 
+  // supply context with constructor
   constructor(public context: BaseConnectionContext) {
     super();
   }
 
-  // provide helpers to set the credentials
+  /**
+   * Use the `ApiKeys` auth method to authorize requests
+   */
   useApiKeys(apiKeys: AuthMethodCredentials<CoinbaseAPIKeys>): this {
     this.auth.apiKeys.setCredentials(apiKeys);
     this.currentAuth = this.auth.apiKeys;
@@ -44,6 +67,9 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<{
     return this;
   }
 
+  /**
+   * Use the `OAuth` auth method to authorize requests
+   */
   useOAuth(credentials: AuthMethodCredentials<CoinbaseOAuth>): this {
     this.auth.oauth.setCredentials(credentials);
     this.currentAuth = this.auth.oauth;
@@ -51,6 +77,9 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<{
     return this;
   }
 
+  /**
+   * Throw `NotAuthorizedError` if user is authenticated with invalid scopes
+   */
   async throwErrorOnInvalidPermissions(): Promise<void> {
     const url = ENDPOINTS.permissions;
     const permissions = await this.currentAuth.request<{ scopes: string[] }>(
@@ -77,6 +106,9 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<{
     }
   }
 
+  /**
+   * Request all pages for a resource and return the combined data
+   */
   async getPaginatedResource<TItem>(endpoint: string | null): Promise<TItem[]> {
     let items: TItem[] = [];
 
@@ -124,6 +156,9 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<{
     return items;
   }
 
+  /**
+   * Get raw data for Coinbase accounts
+   */
   async getAccounts(): Promise<CoinbaseAccount[]> {
     const url = ENDPOINTS.accounts;
     const accounts = await this.getPaginatedResource<CoinbaseAccount>(url);
@@ -131,6 +166,9 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<{
     return accounts;
   }
 
+  /**
+   * Get normalized list of Coinbase balances
+   */
   async getBalances(): Promise<Balances> {
     const accounts = await this.getAccounts();
 

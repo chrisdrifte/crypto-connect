@@ -1,11 +1,20 @@
+/**
+ * @see https://developers.coinbase.com/api/v2#making-requests
+ */
 export type CoinbaseRequestBody = Record<string, string> | string;
 
+/**
+ * @see https://developers.coinbase.com/api/v2#errors
+ */
 export interface CoinbaseError {
   id: string;
   message: string;
   url?: string;
 }
 
+/**
+ * @see https://developers.coinbase.com/api/v2#pagination
+ */
 export interface CoinbasePaginatedResource<TData = unknown>
   extends Record<string, unknown> {
   pagination: {
@@ -20,6 +29,9 @@ export interface CoinbasePaginatedResource<TData = unknown>
   warnings?: CoinbaseError[];
 }
 
+/**
+ * @see https://developers.coinbase.com/api/v2#accounts
+ */
 export type CoinbaseAccount = {
   id: string;
   name: string;

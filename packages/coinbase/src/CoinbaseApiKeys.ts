@@ -6,24 +6,16 @@ import {
   RequestHandlerOptions,
   RequestUrl,
   ResponseData,
+  serializeRequestBody,
 } from "@crypto-connect/common";
 
+/**
+ * Make authenticated requests to Coinbase with Api Keys
+ */
 export class CoinbaseAPIKeys extends APIKeys {
   /**
-   * Convert key/value objects to query string
-   */
-  static serializeData(data: CoinbaseRequestBody): string {
-    // handle objects
-    if (typeof data === "object") {
-      return new URLSearchParams(data).toString();
-    }
-
-    // handle other types
-    return data.toString();
-  }
-
-  /**
-   * Return current timestamp in seconds
+   * Return current timestamp in seconds.
+   * Used as nonce when signing request
    */
   static getTimestamp(): number {
     return Math.floor(Date.now() / 1000);
@@ -37,15 +29,20 @@ export class CoinbaseAPIKeys extends APIKeys {
     timestamp: number,
     method: string,
     url: string,
-    data: CoinbaseRequestBody = "",
+    body: CoinbaseRequestBody = "",
   ): string {
+    // Method must be uppercase
+    method = method.toUpperCase();
+
+    // Url must be supplied without hostname
     const { pathname, search } = new URL(url);
 
-    if (typeof data !== "string") {
-      throw new TypeError("data must be a string");
+    // Request body must be supplied as a string
+    if (body === "object") {
+      body = serializeRequestBody(body);
     }
 
-    return `${timestamp}${method.toUpperCase()}${pathname}${search}${data}`;
+    return `${timestamp}${method}${pathname}${search}${body}`;
   }
 
   /**
@@ -55,19 +52,26 @@ export class CoinbaseAPIKeys extends APIKeys {
     return crypto.createHmac("sha256", apiSecret).update(message).digest("hex");
   }
 
+  /**
+   * Make authenticated request to Coinbase
+   */
   async request<TResult extends ResponseData>(
     url: RequestUrl,
-    { method = "GET" }: RequestHandlerOptions = {},
+    { method = "GET", body = "" }: RequestHandlerOptions = {},
   ): Promise<TResult> {
+    // Require credentials
     if (typeof this.credentials === "undefined") throw new NoCredentialsError();
 
+    // Get request data from instance
     const { apiKey, apiSecret } = this.credentials;
     const { requestHandler } = this.context;
 
+    // Process request data
     const timestamp = CoinbaseAPIKeys.getTimestamp();
-    const message = CoinbaseAPIKeys.getMessage(timestamp, method, url, "");
+    const message = CoinbaseAPIKeys.getMessage(timestamp, method, url, body);
     const signature = CoinbaseAPIKeys.getSignature(message, apiSecret);
 
+    // Execute the request
     const response = await requestHandler(url, {
       headers: {
         "CB-ACCESS-SIGN": signature,
@@ -77,6 +81,7 @@ export class CoinbaseAPIKeys extends APIKeys {
       },
     });
 
+    // Handle non-200 status
     if (response.status !== 200) {
       console.error(response.data);
       throw new ServerError(
@@ -85,6 +90,7 @@ export class CoinbaseAPIKeys extends APIKeys {
       );
     }
 
+    // Return payload
     return response.data as TResult;
   }
 }
