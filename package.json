@@ -13,6 +13,7 @@
     "boot": "yarn global add lerna && lerna bootstrap",
     "start": "lerna exec yarn start",
     "lint": "eslint ./packages --ext .ts,.tsx",
+    "lint:staged": "lint-staged",
     "test": "yarn build && jest",
     "test:watch": "yarn build && jest --watch",
     "prepare": "husky install",
