@@ -4,7 +4,7 @@
   "description": "Connect to Coinbase API",
   "author": "chrisdrifte <chrisdrifte@gmail.com>",
   "license": "ISC",
-  "main": "dist/index.js",
+  "main": "dist/Coinbase.js",
   "directories": {
     "src": "src",
     "test": "__tests__"

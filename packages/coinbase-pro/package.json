@@ -4,7 +4,7 @@
   "description": "Connect to Coinbase Pro API",
   "author": "chrisdrifte <chrisdrifte@gmail.com>",
   "license": "ISC",
-  "main": "dist/index.js",
+  "main": "dist/CoinbasePro.js",
   "directories": {
     "src": "src",
     "test": "__tests__"
