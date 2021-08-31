@@ -4,6 +4,8 @@ export * from "./AuthMethods/OAuth/OAuth";
 
 export * from "./adaptors/requestHandlers/crossFetchAdaptor";
 
+export * from "./utility/getExtraItems";
+export * from "./utility/getMissingItems";
 export * from "./utility/readCredentialsFile";
 export * from "./utility/serializeRequestBody";
 export * from "./utility/urlEncoded";

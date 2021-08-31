@@ -2,7 +2,7 @@
 
 ```ts
 import {
-  UndocumentedResponseError,
+  UndocumentedResultError,
   CryptoConnectError,
   NoCredentialsError,
   NotAuthorizedError,
@@ -17,7 +17,7 @@ try {
     // All custom errors
   }
 
-  if (err instanceof UndocumentedResponseError) {
+  if (err instanceof UndocumentedResultError) {
     // API response doesn't match CryptoConnect's expectations
   }
 

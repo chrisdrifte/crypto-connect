@@ -1,14 +1,20 @@
-import { CoinbaseAccount, CoinbasePaginatedResource } from "./coinbase-types";
 import { CoinbaseAPIKeys } from "./CoinbaseApiKeys";
 import { CoinbaseOAuth } from "./CoinbaseOAuth";
 import {
-  UndocumentedResponseError,
-  NotAuthorizedError,
+  CoinbaseAccount,
+  CoinbasePaginatedResource,
+  CoinbasePermissions,
+} from "./coinbase-types";
+import {
+  UndocumentedResultError,
+  ForbiddenError,
 } from "@crypto-connect/errors";
 import {
   AuthMethodCredentials,
   CryptoBalance,
   BaseConnectionSecure,
+  getMissingItems,
+  getExtraItems,
 } from "@crypto-connect/common";
 
 /**
@@ -74,24 +80,28 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<CoinbaseAuthMethods>
    * Throw `NotAuthorizedError` if user is authenticated with invalid scopes
    */
   async throwErrorOnInvalidPermissions(): Promise<void> {
-    const url = ENDPOINTS.permissions;
-    const permissions = await this.currentAuth.request<{ scopes: string[] }>(
-      url,
+    const endpoint = ENDPOINTS.permissions;
+    const result = await this.currentAuth.request<CoinbasePermissions>(
+      endpoint,
     );
+
+    if (!(result?.scopes instanceof Array)) {
+      throw new UndocumentedResultError(
+        endpoint,
+        "CoinbasePermissions",
+        result,
+      );
+    }
 
     const requiredScopes = REQUIRED_SCOPES;
-    const grantedScopes = permissions.scopes;
+    const grantedScopes = result.scopes;
 
-    const missingScopes = requiredScopes.filter(
-      (requiredScope) => !grantedScopes.includes(requiredScope),
-    );
-    const extraScopes = grantedScopes.filter(
-      (grantedScope) => !requiredScopes.includes(grantedScope),
-    );
+    const missingScopes = getMissingItems(requiredScopes, grantedScopes);
+    const extraScopes = getExtraItems(requiredScopes, grantedScopes);
 
     if (missingScopes.length) {
       console.error(`Insufficient permissions: add ${missingScopes}`);
-      throw new NotAuthorizedError();
+      throw new ForbiddenError();
     }
 
     if (extraScopes.length) {
@@ -111,8 +121,16 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<CoinbaseAuthMethods>
       >(endpoint);
 
       // handle errors
-      if (!result || typeof result.data === "undefined") {
-        throw new UndocumentedResponseError();
+      if (
+        !result ||
+        typeof result.data === "undefined" ||
+        !(result.data instanceof Array)
+      ) {
+        throw new UndocumentedResultError(
+          endpoint,
+          "PaginatedResource",
+          result,
+        );
       }
 
       // Help devs notice warnings
@@ -144,8 +162,18 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<CoinbaseAuthMethods>
    * Get raw data for Coinbase accounts
    */
   async getAccounts(): Promise<CoinbaseAccount[]> {
-    const url = ENDPOINTS.accounts;
-    const accounts = await this.getPaginatedResource<CoinbaseAccount>(url);
+    const endpoint = ENDPOINTS.accounts;
+    const accounts = await this.getPaginatedResource<CoinbaseAccount>(endpoint);
+
+    accounts.forEach((account) => {
+      if (
+        typeof account.id === "undefined" ||
+        typeof account.balance?.currency === "undefined" ||
+        typeof account.balance?.amount === "undefined"
+      ) {
+        throw new UndocumentedResultError(endpoint, "CoinbaseAccount", account);
+      }
+    });
 
     return accounts;
   }

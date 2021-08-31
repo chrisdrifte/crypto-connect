@@ -53,6 +53,13 @@ export abstract class AuthMethod<
   _credentials?: TCredentials;
 
   /**
+   * Constructor
+   *
+   * Make context available on instances
+   */
+  constructor(public context: TContext) {}
+
+  /**
    * Private credentials getter
    */
   get credentials(): TCredentials {
@@ -84,15 +91,8 @@ export abstract class AuthMethod<
    * Override if custom validation/transformation needed.
    */
   setCredentials(credentials: TCredentials): void {
-    this._credentials = credentials;
+    this.credentials = credentials;
   }
-
-  /**
-   * Constructor
-   *
-   * Make context available on instances
-   */
-  constructor(public context: TContext) {}
 
   /**
    * Abstract request method, to be implemented by child class

@@ -1,11 +1,10 @@
 /**
- * Coinbase Pro
+ * Coinbase
  *
- * @group coinbase-pro
+ * @group coinbase
  * @group unit
  */
-
-describe("Coinbase Pro API Keys and Passphrase", () => {
+describe("Coinbase API Keys", () => {
   describe("getTimestamp()", () => {
     it.todo("should return the time in seconds");
   });

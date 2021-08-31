@@ -33,6 +33,13 @@ export interface CoinbasePaginatedResource<TData = unknown>
 }
 
 /**
+ * @see https://developers.coinbase.com/api/v2#scopes
+ */
+export type CoinbasePermissions = {
+  scopes: string[];
+};
+
+/**
  * @see https://developers.coinbase.com/api/v2#accounts
  */
 export type CoinbaseAccount = {

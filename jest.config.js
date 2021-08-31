@@ -4,5 +4,10 @@ const base = require("./jest.config.base");
 module.exports = {
   ...base,
   roots: ["<rootDir>"],
-  projects: ["<rootDir>/packages/coinbase-pro", "<rootDir>/packages/coinbase"],
+  projects: [
+    "<rootDir>/packages/coinbase-pro",
+    "<rootDir>/packages/coinbase",
+    "<rootDir>/packages/common",
+    "<rootDir>/packages/errors",
+  ],
 };

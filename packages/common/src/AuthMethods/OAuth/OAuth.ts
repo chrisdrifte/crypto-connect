@@ -163,7 +163,7 @@ export abstract class OAuth<TError = RequestBody>
     }
 
     // Get request data from instance
-    const { getTokensHandler } = this.credentials;
+    const { getTokensHandler, setTokensHandler } = this.credentials;
     const { accessToken } = await getTokensHandler();
     const { requestHandler } = this.context;
 
@@ -173,6 +173,11 @@ export abstract class OAuth<TError = RequestBody>
         token: accessToken,
       },
       headers,
+    });
+
+    await setTokensHandler({
+      accessToken: "",
+      refreshToken: "",
     });
   }
 

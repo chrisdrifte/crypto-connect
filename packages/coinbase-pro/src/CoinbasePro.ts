@@ -1,5 +1,6 @@
 import { CoinbaseProAccount } from "./coinbase-pro-types";
 import { CoinbaseProApiKeys } from "./CoinbaseProApiKeys";
+import { UndocumentedResultError } from "@crypto-connect/errors";
 import {
   AuthMethodCredentials,
   CryptoBalance,
@@ -33,7 +34,7 @@ class CoinbaseProConnectionSecure extends BaseConnectionSecure<CoinbaseProAuthMe
   auth = {
     apiKeys: new CoinbaseProApiKeys(this.context),
   };
-  
+
   /**
    * Use the `ApiKeys` auth method to authorize requests
    */
@@ -47,12 +48,32 @@ class CoinbaseProConnectionSecure extends BaseConnectionSecure<CoinbaseProAuthMe
    * Get raw data for Coinbase Pro accounts
    */
   async getAccounts(): Promise<CoinbaseProAccount[]> {
-    const url = ENDPOINTS.accounts;
-    let accounts = await this.auth.apiKeys.request<CoinbaseProAccount[]>(url);
+    const endpoint = ENDPOINTS.accounts;
+    const accounts = await this.auth.apiKeys.request<CoinbaseProAccount[]>(
+      endpoint,
+    );
 
     if (!(accounts instanceof Array)) {
-      accounts = [];
+      throw new UndocumentedResultError(
+        endpoint,
+        "CoinbaseProAccount[]",
+        accounts,
+      );
     }
+
+    accounts.forEach((account) => {
+      if (
+        typeof account.id === "undefined" ||
+        typeof account.currency === "undefined" ||
+        typeof account.balance === "undefined"
+      ) {
+        throw new UndocumentedResultError(
+          endpoint,
+          "CoinbaseProAccount",
+          account,
+        );
+      }
+    });
 
     return accounts;
   }
