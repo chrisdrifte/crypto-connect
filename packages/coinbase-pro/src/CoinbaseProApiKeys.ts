@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { AuthMethod, RequestUrl, ResponseData } from "@crypto-connect/common";
+import { AuthMethod, RequestUrl, ResponseBody } from "@crypto-connect/common";
 import { NoCredentialsError, ServerError } from "@crypto-connect/errors";
 
 /**
@@ -46,7 +46,7 @@ export class CoinbaseProApiKeys extends AuthMethod<{
   /**
    * Make authenticated request to Coinbase Pro
    */
-  async request<TResult extends ResponseData>(
+  async request<TResult extends ResponseBody>(
     url: RequestUrl,
   ): Promise<TResult> {
     // Require credentials
@@ -77,14 +77,14 @@ export class CoinbaseProApiKeys extends AuthMethod<{
 
     // Handle non-200 status
     if (response.status !== 200) {
-      console.error(response.data);
+      console.error(response.body);
       throw new ServerError(
         response.status || 0,
-        JSON.stringify(response.data),
+        JSON.stringify(response.body),
       );
     }
 
     // Return payload
-    return response.data as TResult;
+    return response.body as TResult;
   }
 }

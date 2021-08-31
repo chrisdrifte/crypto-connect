@@ -1,14 +1,15 @@
+import crossFetch from "cross-fetch";
 import { BaseConnectionContext, BaseConnectionInterface } from "./types";
-import { crossFetchAdaptor } from "./adaptors/requestMethods/crossFetchAdaptor";
+import { crossFetchAdaptor } from "./adaptors/requestHandlers/crossFetchAdaptor";
 
+/**
+ * A connection to a service which implements all normalized methods
+ */
 export abstract class BaseConnection implements BaseConnectionInterface {
+  // default context is provided
   context: BaseConnectionContext = {
-    requestHandler: crossFetchAdaptor(),
+    requestHandler: crossFetchAdaptor(crossFetch),
   };
-
-  async checkPermissions(): Promise<void> {
-    // noop by default
-  }
 
   abstract getBalances(): ReturnType<BaseConnectionInterface["getBalances"]>;
 }

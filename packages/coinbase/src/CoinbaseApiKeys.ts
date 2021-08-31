@@ -1,5 +1,5 @@
 import * as crypto from "crypto";
-import { APIKeys, RequestUrl, ResponseData } from "@crypto-connect/common";
+import { APIKeys, RequestUrl, ResponseBody } from "@crypto-connect/common";
 import { NoCredentialsError, ServerError } from "@crypto-connect/errors";
 
 /**
@@ -43,7 +43,7 @@ export class CoinbaseAPIKeys extends APIKeys {
   /**
    * Make authenticated request to Coinbase
    */
-  async request<TResult extends ResponseData>(
+  async request<TResult extends ResponseBody>(
     url: RequestUrl,
   ): Promise<TResult> {
     // Require credentials
@@ -73,14 +73,14 @@ export class CoinbaseAPIKeys extends APIKeys {
 
     // Handle non-200 status
     if (response.status !== 200) {
-      console.error(response.data);
+      console.error(response.body);
       throw new ServerError(
         response.status || 0,
-        JSON.stringify(response.data),
+        JSON.stringify(response.body),
       );
     }
 
     // Return payload
-    return response.data as TResult;
+    return response.body as TResult;
   }
 }

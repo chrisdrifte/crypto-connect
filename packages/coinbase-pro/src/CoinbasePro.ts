@@ -2,7 +2,7 @@ import { CoinbaseProAccount } from "./coinbase-pro-types";
 import { CoinbaseProApiKeys } from "./CoinbaseProApiKeys";
 import {
   AuthMethodCredentials,
-  Balances,
+  CryptoBalance,
   BaseConnectionSecure,
 } from "@crypto-connect/common";
 
@@ -60,7 +60,7 @@ class CoinbaseProConnectionSecure extends BaseConnectionSecure<CoinbaseProAuthMe
   /**
    * Get normalized list of Coinbase Pro balances
    */
-  async getBalances(): Promise<Balances> {
+  async getBalances(): Promise<CryptoBalance[]> {
     const accounts = await this.getAccounts();
 
     const balances = accounts.map((account) => ({

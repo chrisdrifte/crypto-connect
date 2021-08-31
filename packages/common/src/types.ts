@@ -1,74 +1,92 @@
 /**
- * Package Response Types
+ * Normalized Crypto Balance
  */
-export type Balances = CryptoBalance[];
-
-// A single crypto balance
 export type CryptoBalance = { id: string; asset: string; amount: string };
 
 /**
- * HTTP Client
+ * Method of HTTP request - GET, POST, etc.
  */
 export type RequestMethod = string;
+
+/**
+ * Full url of HTTP request
+ */
 export type RequestUrl = string;
+
+/**
+ * Headers of HTTP request
+ */
 export type RequestHeaders = Record<string, string>;
+
+/**
+ * Body of HTTP request
+ */
 export type RequestBody = Record<string, string> | string;
 
-export type RequestHandler = (
-  url: RequestUrl,
-  options?: RequestHandlerOptions,
-) => Promise<Response>;
+/**
+ * Status of HTTP response
+ */
+export type ResponseStatus = number;
 
-export type RequestHandlerOptions =
+/**
+ * Headers of HTTP response
+ */
+export type ResponseHeaders = Record<string, string | string[] | undefined>;
+
+/**
+ * Body of HTTP response
+ */
+export type ResponseBody = Record<string, unknown> | unknown[];
+
+/**
+ * Normalized request
+ */
+export type Request =
   | {
       method?: RequestMethod;
       headers?: RequestHeaders;
       body?: RequestBody;
     }
   | undefined;
-export type ResponseStatus = number;
-export type ResponseHeaders = Record<string, string | string[] | undefined>;
-export type ResponseData = Record<string, unknown> | unknown[];
 
-export type Response<TData extends ResponseData = ResponseData> = {
+/**
+ * Normalized response
+ */
+export type Response<TBody extends ResponseBody = ResponseBody> = {
   status?: ResponseStatus;
   headers?: ResponseHeaders;
-  data: TData;
+  body: TBody;
 };
 
 /**
- * Service Connections
+ * Transform clients like axios, crossFetch, got etc. into a request handler
+ */
+export type RequestHandlerAdaptor = (client: any) => RequestHandler;
+
+/**
+ * Normalized request handler
+ */
+export type RequestHandler = (
+  url: RequestUrl,
+  options?: Request,
+) => Promise<Response>;
+
+/**
+ * Context required by all connections
  */
 export type BaseConnectionContext = { requestHandler: RequestHandler };
 
-// Service connections
+/**
+ * Methods required by all connections
+ */
 export interface BaseConnectionInterface {
-  checkPermissions(): Promise<void>;
-  getBalances(): Promise<Balances>;
-}
-
-export interface BaseConnectionSecureInterface<TAuth>
-  extends BaseConnectionInterface {
-  auth: TAuth;
+  getBalances(): Promise<CryptoBalance[]>;
 }
 
 /**
- * Auth Methods
+ * Methods required by all connections that implement authorization
  */
-export type Credentials = Record<string, unknown>;
-
-export type AuthMethodCredentials<A extends AuthMethodInterface<any, any>> =
-  NonNullable<A["credentials"]>;
-
-export type AuthMethodContext<A extends AuthMethodInterface<any, any>> =
-  NonNullable<A["context"]>;
-
-export interface AuthMethodInterface<
-  TCredentials extends Credentials = Credentials,
-  TContext extends BaseConnectionContext = BaseConnectionContext,
-> {
-  context: TContext;
-  credentials?: TCredentials;
-  setCredentials: (credentials: TCredentials) => void;
-  request: (...args: any[]) => Promise<any>;
+export interface BaseConnectionSecureInterface<TAuth>
+  extends BaseConnectionInterface {
+  auth: TAuth;
 }

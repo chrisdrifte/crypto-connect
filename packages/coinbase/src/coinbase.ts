@@ -3,7 +3,7 @@ import { CoinbaseAPIKeys } from "./CoinbaseApiKeys";
 import { CoinbaseOAuth } from "./CoinbaseOAuth";
 import {
   AuthMethodCredentials,
-  Balances,
+  CryptoBalance,
   BaseConnectionSecure,
 } from "@crypto-connect/common";
 import {
@@ -163,10 +163,10 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<CoinbaseAuthMethods>
   /**
    * Get normalized list of Coinbase balances
    */
-  async getBalances(): Promise<Balances> {
+  async getBalances(): Promise<CryptoBalance[]> {
     const accounts = await this.getAccounts();
 
-    const balances: Balances = accounts.map((account) => ({
+    const balances: CryptoBalance[] = accounts.map((account) => ({
       id: account.id,
       asset: account.balance.currency,
       amount: account.balance.amount,

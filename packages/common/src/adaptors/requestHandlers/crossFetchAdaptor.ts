@@ -1,9 +1,18 @@
-import defaultFetch from "cross-fetch";
-import { RequestHandler } from "../../types";
+import { RequestHandlerAdaptor } from "../../types";
 import { serializeRequestBody } from "../../utility/serializeRequestBody";
 
-export const crossFetchAdaptor =
-  (fetch = defaultFetch): RequestHandler =>
+/**
+ * Adapt crossFetch into a request handler
+ *
+ * @example
+ *
+ * ```ts
+ * import crossFetch from "crossFetch"
+ * const requestHandler = crossFetchAdaptor(crossFetch);
+ * ```
+ */
+export const crossFetchAdaptor: RequestHandlerAdaptor =
+  (fetch) =>
   async (url, { method = "GET", headers = {}, body = "" } = {}) => {
     const requestHeaders = Object.assign({}, headers);
 
@@ -31,6 +40,6 @@ export const crossFetchAdaptor =
     return {
       status: response.status,
       headers: responseHeaders,
-      data: await response.json(),
+      body: await response.json(),
     };
   };

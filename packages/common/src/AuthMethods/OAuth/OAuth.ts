@@ -1,86 +1,90 @@
-import { AuthMethod } from "../AuthMethod";
+import { AuthMethod, BaseCredentials } from "../AuthMethod";
 import { NoCredentialsError, NotAuthorizedError } from "@crypto-connect/errors";
-import {
-  Credentials,
-  RequestHandlerOptions,
-  RequestUrl,
-  ResponseData,
-} from "../../types";
+import { Request, RequestHeaders, RequestUrl, ResponseBody } from "../../types";
 
-interface OAuthCredentials extends Credentials {
+/**
+ * Credentials and methods required to configure OAuth requests
+ */
+interface OAuthCredentials extends BaseCredentials {
   clientId: string;
   clientSecret: string;
   getTokensHandler: () => Promise<OAuthTokens> | OAuthTokens;
   setTokensHandler: (tokens: OAuthTokens) => Promise<void> | void;
 }
 
+/**
+ * Endpoints required to make OAuth requests
+ */
 interface OAuthEndpoints {
   authorizeUrl: string;
   tokenUrl: string;
   revokeUrl?: string;
 }
 
+/**
+ * OAuth Tokens
+ */
 interface OAuthTokens {
   accessToken: string;
   refreshToken: string;
 }
 
+/**
+ * Interface for OAuth auth method
+ */
 interface OAuthInterface extends AuthMethod<OAuthCredentials> {
   endpoints: OAuthEndpoints;
   signIn(redirectUri: string, scope?: string[], state?: string): string;
   exchangeCode(
     redirectUri: string,
     code: string,
-    state?: string,
+    headers?: RequestHeaders,
   ): Promise<void>;
   exchangeRefreshToken(): Promise<void>;
 }
 
+/**
+ * Authorized requests with OAuth
+ */
 export abstract class OAuth
   extends AuthMethod<OAuthCredentials>
   implements OAuthInterface
 {
+  /**
+   * Endpoints placeholder
+   */
   abstract endpoints: OAuthEndpoints;
 
-  // OAuth is a standardized auth method
-  // so we should be able to keep most of the logic here and
-  // use it to handle OAuth for all integrations that implement it
+  /**
+   * Generates url for user to authorize OAuth access
+   */
   signIn(redirectUri: string, scope?: string[], state?: string): string {
     if (typeof this.credentials === "undefined") throw new NoCredentialsError();
 
-    const { authorizeUrl } = this.endpoints;
-    const { clientId } = this.credentials;
-
-    let url = authorizeUrl;
-    url += "?";
-    url += `&client_id=${clientId}`;
-    url += "&response_type=code";
-    url += `&redirect_uri=${encodeURI(redirectUri)}`;
-
-    if (scope && scope instanceof Array) {
-      url += `&scope=${scope.join(",")}`;
-    }
-
-    if (state) {
-      url += `&state=${state}`;
-    }
-
-    return url;
+    redirectUri;
+    scope;
+    state;
+    throw new Error("Not implemented");
   }
 
-  async exchangeCode(redirectUri: string, code: string): Promise<void> {
+  /**
+   * Exchanges code for tokens
+   */
+  async exchangeCode(
+    redirectUri: string,
+    code: string,
+    headers: RequestHeaders = {},
+  ): Promise<void> {
+    // Require credentials
     if (typeof this.credentials === "undefined") throw new NoCredentialsError();
 
+    // Get request data from instance
     const { tokenUrl } = this.endpoints;
-    const { clientId, clientSecret } = this.credentials;
-    /**
-     * access_token   New active access token
-     * token_type     Value bearer
-     * expires_in     Access token expiration in seconds
-     * refresh_token  Refresh token which can be used to refresh expired access token
-     * scope          List of permissions applied to given access token
-     */
-    const response = await this.context.requestHandler(tokenUrl, {
+    const { clientId, clientSecret, setTokensHandler } = this.credentials;
+    const { requestHandler } = this.context;
+
+    // Execute the request
+    const response = await requestHandler(tokenUrl, {
       method: "POST",
       body: {
         grant_type: "authorization_code",
@@ -89,31 +93,40 @@ export abstract class OAuth
         client_secret: clientSecret,
         redirect_uri: encodeURI(redirectUri),
       },
+      headers,
     });
-    console.log(response);
 
     // save the tokens
-    await this.credentials.setTokensHandler({
-      accessToken: "xxx",
-      refreshToken: "yyy",
+    const { access_token, refresh_token } = response.body as unknown as {
+      access_token: string; // New active access token
+      token_type: string; // Value bearer
+      expires_in: string | number; // Access token expiration in seconds
+      refresh_token: string; // Refresh token which can be used to refresh expired access token
+      scope: string | string[]; // List of permissions applied to given access token
+    };
+
+    await setTokensHandler({
+      accessToken: access_token,
+      refreshToken: refresh_token,
     });
   }
 
-  async exchangeRefreshToken(): Promise<void> {
+  /**
+   * Exchanges refresh token for new tokens
+   */
+  async exchangeRefreshToken(headers: RequestHeaders = {}): Promise<void> {
+    // Require credentials
     if (typeof this.credentials === "undefined") throw new NoCredentialsError();
 
+    // Get request data from instance
     const { tokenUrl } = this.endpoints;
-    const { clientId, clientSecret } = this.credentials;
-    const { refreshToken } = await this.credentials.getTokensHandler();
+    const { clientId, clientSecret, setTokensHandler, getTokensHandler } =
+      this.credentials;
+    const { refreshToken } = await getTokensHandler();
+    const { requestHandler } = this.context;
 
-    /**
-     * access_token   New active access token
-     * token_type     Value bearer
-     * expires_in     Access token expiration in seconds
-     * refresh_token  New refresh token which can be used to refresh expired access token
-     * scope          List of permissions applied to given access token
-     */
-    const response = await this.context.requestHandler(tokenUrl, {
+    // Execute the request
+    const response = await requestHandler(tokenUrl, {
       method: "POST",
       body: {
         grant_type: "refresh_token",
@@ -121,38 +134,60 @@ export abstract class OAuth
         client_id: clientId,
         client_secret: clientSecret,
       },
+      headers,
     });
-    console.log(response);
 
     // save the tokens
-    await this.credentials.setTokensHandler({
-      accessToken: "xxx",
-      refreshToken: "yyy",
+    const { access_token, refresh_token } = response.body as unknown as {
+      access_token: string; // New active access token
+      token_type: string; // Value bearer
+      expires_in: string | number; // Access token expiration in seconds
+      refresh_token: string; // Refresh token which can be used to refresh expired access token
+      scope: string | string[]; // List of permissions applied to given access token
+    };
+
+    await setTokensHandler({
+      accessToken: access_token,
+      refreshToken: refresh_token,
     });
   }
 
-  async revoke(): Promise<void> {
+  /**
+   * Revoke authorization if possible
+   */
+  async revoke(headers: RequestHeaders = {}): Promise<void> {
+    // Require credentials
     if (typeof this.credentials === "undefined") throw new NoCredentialsError();
 
+    // Get request data from instance
     const { revokeUrl } = this.endpoints;
 
+    // Ignore if optional endpoint not provided
     if (!revokeUrl) {
       return;
     }
 
-    const { accessToken } = await this.credentials.getTokensHandler();
+    // Get request data from instance
+    const { getTokensHandler } = this.credentials;
+    const { accessToken } = await getTokensHandler();
+    const { requestHandler } = this.context;
 
-    await this.context.requestHandler(revokeUrl, {
+    await requestHandler(revokeUrl, {
       method: "POST",
       body: {
         token: accessToken,
       },
+      headers,
     });
   }
 
-  async request<TResult extends ResponseData>(
+  /**
+   * Make request to API authorized by OAuth access token
+   * Automatically refresh if necessary
+   */
+  async request<TResult extends ResponseBody>(
     url: RequestUrl,
-    { method = "GET", headers = {}, body = "" }: RequestHandlerOptions = {},
+    { method = "GET", headers = {}, body = "" }: Request = {},
   ): Promise<TResult> {
     if (typeof this.credentials === "undefined") throw new NoCredentialsError();
 
