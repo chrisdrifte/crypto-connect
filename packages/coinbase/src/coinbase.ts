@@ -1,7 +1,10 @@
-import { BadResponseError, NotAuthorizedError } from "@crypto-connect/errors";
 import { CoinbaseAccount, CoinbasePaginatedResource } from "./coinbase-types";
 import { CoinbaseAPIKeys } from "./CoinbaseApiKeys";
 import { CoinbaseOAuth } from "./CoinbaseOAuth";
+import {
+  UndocumentedResponseError,
+  NotAuthorizedError,
+} from "@crypto-connect/errors";
 import {
   AuthMethodCredentials,
   CryptoBalance,
@@ -109,7 +112,7 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<CoinbaseAuthMethods>
 
       // handle errors
       if (!result || typeof result.data === "undefined") {
-        throw new BadResponseError();
+        throw new UndocumentedResponseError();
       }
 
       // Help devs notice warnings

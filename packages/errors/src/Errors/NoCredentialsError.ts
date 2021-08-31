@@ -1,10 +1,11 @@
 import { CryptoConnectError } from "./CryptoConnectError";
 
+/**
+ * Request failed: credentials not provided
+ */
 export class NoCredentialsError extends CryptoConnectError {
   constructor() {
-    super(
-      "A method that requires credentials was called before setCredentials()",
-    );
+    super("Request failed: credentials not provided");
     this.name = "NoCredentialsError";
   }
 }

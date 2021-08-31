@@ -2,8 +2,7 @@
 
 ```ts
 import {
-  BadResponseError,
-  ClientError,
+  UndocumentedResponseError,
   CryptoConnectError,
   NoCredentialsError,
   NotAuthorizedError,
@@ -18,7 +17,7 @@ try {
     // All custom errors
   }
 
-  if (err instanceof BadResponseError) {
+  if (err instanceof UndocumentedResponseError) {
     // API response doesn't match CryptoConnect's expectations
   }
 
@@ -30,10 +29,6 @@ try {
   if (err instanceof NotAuthorizedError) {
     // Credentials have been supplied but are not sufficient to authorize
     // the request
-  }
-
-  if (err instanceof ClientError) {
-    // Server responded with a 200 status, but content contained error data
   }
 
   if (err instanceof ServerError) {
