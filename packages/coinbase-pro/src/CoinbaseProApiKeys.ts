@@ -8,7 +8,7 @@ import {
   ResponseData,
 } from "@crypto-connect/common";
 
-export class CoinbaseProApiKeysAndPassphrase extends AuthMethod<{
+export class CoinbaseProApiKeys extends AuthMethod<{
   apiKey: string;
   apiSecret: string;
   passphrase: string;
@@ -71,17 +71,9 @@ export class CoinbaseProApiKeysAndPassphrase extends AuthMethod<{
     const { requestHandler } = this.context;
     const { apiKey, apiSecret, passphrase } = this.credentials;
 
-    const timestamp = CoinbaseProApiKeysAndPassphrase.getTimestamp();
-    const message = CoinbaseProApiKeysAndPassphrase.getMessage(
-      timestamp,
-      method,
-      url,
-      body,
-    );
-    const signature = CoinbaseProApiKeysAndPassphrase.getSignature(
-      message,
-      apiSecret,
-    );
+    const timestamp = CoinbaseProApiKeys.getTimestamp();
+    const message = CoinbaseProApiKeys.getMessage(timestamp, method, url, body);
+    const signature = CoinbaseProApiKeys.getSignature(message, apiSecret);
 
     const result = await requestHandler(url, {
       headers: {

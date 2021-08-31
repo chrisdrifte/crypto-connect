@@ -1,5 +1,5 @@
 import { CoinbaseProAccount } from "./coinbase-pro-types";
-import { CoinbaseProApiKeysAndPassphrase } from "./CoinbaseProApiKeysAndPassphrase";
+import { CoinbaseProApiKeys } from "./CoinbaseProApiKeys";
 import {
   AuthMethodCredentials,
   Balances,
@@ -12,16 +12,14 @@ const ENDPOINTS = {
 };
 
 class CoinbaseProConnectionSecure extends BaseConnectionSecure<{
-  apiKeys: CoinbaseProApiKeysAndPassphrase;
+  apiKeys: CoinbaseProApiKeys;
 }> {
   auth = {
-    apiKeys: new CoinbaseProApiKeysAndPassphrase(this.context),
+    apiKeys: new CoinbaseProApiKeys(this.context),
   };
 
   // provide a helper to set the credentials
-  useApiKeysAndPassphrase(
-    credentials: AuthMethodCredentials<CoinbaseProApiKeysAndPassphrase>,
-  ): this {
+  useApiKeys(credentials: AuthMethodCredentials<CoinbaseProApiKeys>): this {
     this.auth.apiKeys.setCredentials(credentials);
 
     return this;
