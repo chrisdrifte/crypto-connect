@@ -7,7 +7,7 @@ import { NoCredentialsError, ServerError } from "@crypto-connect/errors";
  */
 export class CoinbaseAPIKeys extends APIKeys {
   /**
-   * Return current timestamp in seconds.
+   * Return current timestamp in seconds
    * Used as nonce when signing request
    */
   static getTimestamp(): number {
@@ -58,14 +58,17 @@ export class CoinbaseAPIKeys extends APIKeys {
     const message = CoinbaseAPIKeys.getMessage(timestamp, "GET", url);
     const signature = CoinbaseAPIKeys.getSignature(message, apiSecret);
 
+    const headers = {
+      "Content-Type": "application/json",
+      "CB-ACCESS-SIGN": `${signature}`,
+      "CB-ACCESS-TIMESTAMP": `${timestamp}`,
+      "CB-ACCESS-KEY": `${apiKey}`,
+      "CB-VERSION": "2015-07-22",
+    };
+
     // Execute the request
     const response = await requestHandler(url, {
-      headers: {
-        "CB-ACCESS-SIGN": `${signature}`,
-        "CB-ACCESS-TIMESTAMP": `${timestamp}`,
-        "CB-ACCESS-KEY": `${apiKey}`,
-        "CB-VERSION": "2015-07-22",
-      },
+      headers,
     });
 
     // Handle non-200 status

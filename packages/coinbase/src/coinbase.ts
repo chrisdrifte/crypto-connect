@@ -54,7 +54,7 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<CoinbaseAuthMethods>
   /**
    * Use the `ApiKeys` auth method to authorize requests
    */
-  useApiKeys(apiKeys: AuthMethodCredentials<CoinbaseAPIKeys>): this {
+  withApiKeys(apiKeys: AuthMethodCredentials<CoinbaseAPIKeys>): this {
     this.auth.apiKeys.setCredentials(apiKeys);
     this.currentAuth = this.auth.apiKeys;
 
@@ -64,7 +64,7 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<CoinbaseAuthMethods>
   /**
    * Use the `OAuth` auth method to authorize requests
    */
-  useOAuth(credentials: AuthMethodCredentials<CoinbaseOAuth>): this {
+  withOAuth(credentials: AuthMethodCredentials<CoinbaseOAuth>): this {
     this.auth.oauth.setCredentials(credentials);
     this.currentAuth = this.auth.oauth;
 

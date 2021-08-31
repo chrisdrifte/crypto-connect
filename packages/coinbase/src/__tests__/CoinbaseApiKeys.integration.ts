@@ -12,7 +12,7 @@ import { readCredentialsFile } from "@crypto-connect/common";
 const [apiKey, apiSecret] = readCredentialsFile(`${__dirname}/.keys`);
 
 const setup = () => ({
-  coinbase: new Coinbase().useApiKeys({
+  coinbase: new Coinbase().withApiKeys({
     apiKey,
     apiSecret,
   }),

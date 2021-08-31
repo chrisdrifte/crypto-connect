@@ -6,25 +6,46 @@ import {
   BaseConnectionSecure,
 } from "@crypto-connect/common";
 
+/**
+ * Coinbase Pro API Base URL
+ */
 const BASE_URL = "https://api.pro.coinbase.com";
+
+/**
+ * Coinbase Request Endpoints
+ */
 const ENDPOINTS = {
   accounts: `${BASE_URL}/accounts`,
 };
 
-class CoinbaseProConnectionSecure extends BaseConnectionSecure<{
+/**
+ * Coinbase API Auth Methods
+ */
+type CoinbaseProAuthMethods = {
   apiKeys: CoinbaseProApiKeys;
-}> {
+};
+
+/**
+ * Coinbase Pro API Client
+ */
+class CoinbaseProConnectionSecure extends BaseConnectionSecure<CoinbaseProAuthMethods> {
+  // create auth method instances with context
   auth = {
     apiKeys: new CoinbaseProApiKeys(this.context),
   };
 
-  // provide a helper to set the credentials
-  useApiKeys(credentials: AuthMethodCredentials<CoinbaseProApiKeys>): this {
+  /**
+   * Use the `ApiKeys` auth method to authorize requests
+   */
+  withApiKeys(credentials: AuthMethodCredentials<CoinbaseProApiKeys>): this {
     this.auth.apiKeys.setCredentials(credentials);
 
     return this;
   }
 
+  /**
+   * Get raw data for Coinbase Pro accounts
+   */
   async getAccounts(): Promise<CoinbaseProAccount[]> {
     const url = ENDPOINTS.accounts;
     let accounts = await this.auth.apiKeys.request<CoinbaseProAccount[]>(url);
@@ -36,6 +57,9 @@ class CoinbaseProConnectionSecure extends BaseConnectionSecure<{
     return accounts;
   }
 
+  /**
+   * Get normalized list of Coinbase Pro balances
+   */
   async getBalances(): Promise<Balances> {
     const accounts = await this.getAccounts();
 

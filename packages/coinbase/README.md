@@ -13,7 +13,7 @@ import { Coinbase } from "@crypto-connect/coinbase";
 
 async function getCoinbaseBalances(apiKey: string, apiSecret: string) {
   // Authorise
-  const coinbase = new Coinbase().useApiKeys({
+  const coinbase = new Coinbase().withApiKeys({
     apiKey: "XXX",
     apiSecret: "YYY",
   });

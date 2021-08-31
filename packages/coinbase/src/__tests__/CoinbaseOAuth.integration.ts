@@ -14,7 +14,7 @@ const [clientId, clientSecret, devToken] = readCredentialsFile(
 );
 
 const setup = () => ({
-  coinbase: new Coinbase().useOAuth({
+  coinbase: new Coinbase().withOAuth({
     clientId,
     clientSecret,
     getTokensHandler: () => {

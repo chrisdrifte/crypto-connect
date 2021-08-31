@@ -17,7 +17,7 @@ async function getCoinbaseProBalances(
   passphrase: string,
 ) {
   // Authorise
-  const coinbasePro = new CoinbasePro().useApiKeys({
+  const coinbasePro = new CoinbasePro().withApiKeys({
     apiKey: "XXX",
     apiSecret: "YYY",
     passphrase: "ZZZ",
