@@ -15,8 +15,10 @@ export const crossFetchAdaptor =
     // Add body to applicable methods
     const canHaveBody = () => !["GET", "HEAD"].includes(method.toUpperCase());
     if (body && canHaveBody()) {
-      requestHeaders["Content-Type"] = "application/x-www-form-urlencoded";
-      requestInit.body = serializeRequestBody(body);
+      requestInit.body = serializeRequestBody(
+        body,
+        requestHeaders["Content-Type"],
+      );
     }
 
     const response = await fetch(url, requestInit);

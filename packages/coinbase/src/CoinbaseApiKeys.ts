@@ -1,13 +1,6 @@
 import * as crypto from "crypto";
-import { CoinbaseRequestBody } from "./coinbase-types";
+import { APIKeys, RequestUrl, ResponseData } from "@crypto-connect/common";
 import { NoCredentialsError, ServerError } from "@crypto-connect/errors";
-import {
-  APIKeys,
-  RequestHandlerOptions,
-  RequestUrl,
-  ResponseData,
-  serializeRequestBody,
-} from "@crypto-connect/common";
 
 /**
  * Make authenticated requests to Coinbase with Api Keys
@@ -29,18 +22,13 @@ export class CoinbaseAPIKeys extends APIKeys {
     timestamp: number,
     method: string,
     url: string,
-    body: CoinbaseRequestBody = "",
+    body = "",
   ): string {
     // Method must be uppercase
     method = method.toUpperCase();
 
     // Url must be supplied without hostname
     const { pathname, search } = new URL(url);
-
-    // Request body must be supplied as a string
-    if (body === "object") {
-      body = serializeRequestBody(body);
-    }
 
     return `${timestamp}${method}${pathname}${search}${body}`;
   }
@@ -57,7 +45,6 @@ export class CoinbaseAPIKeys extends APIKeys {
    */
   async request<TResult extends ResponseData>(
     url: RequestUrl,
-    { method = "GET", body = "" }: RequestHandlerOptions = {},
   ): Promise<TResult> {
     // Require credentials
     if (typeof this.credentials === "undefined") throw new NoCredentialsError();
@@ -68,7 +55,7 @@ export class CoinbaseAPIKeys extends APIKeys {
 
     // Process request data
     const timestamp = CoinbaseAPIKeys.getTimestamp();
-    const message = CoinbaseAPIKeys.getMessage(timestamp, method, url, body);
+    const message = CoinbaseAPIKeys.getMessage(timestamp, "GET", url);
     const signature = CoinbaseAPIKeys.getSignature(message, apiSecret);
 
     // Execute the request
