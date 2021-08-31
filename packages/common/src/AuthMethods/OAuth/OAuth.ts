@@ -1,6 +1,12 @@
 import { AuthMethod, BaseCredentials } from "../AuthMethod";
-import { NoCredentialsError, NotAuthorizedError } from "@crypto-connect/errors";
-import { Request, RequestHeaders, RequestUrl, ResponseBody } from "../../types";
+import { NotAuthorizedError } from "@crypto-connect/errors";
+import {
+  RequestOptions,
+  RequestHeaders,
+  RequestUrl,
+  ResponseBody,
+  RequestBody,
+} from "../../types";
 
 /**
  * Credentials and methods required to configure OAuth requests
@@ -46,7 +52,7 @@ interface OAuthInterface extends AuthMethod<OAuthCredentials> {
 /**
  * Authorized requests with OAuth
  */
-export abstract class OAuth
+export abstract class OAuth<TError = RequestBody>
   extends AuthMethod<OAuthCredentials>
   implements OAuthInterface
 {
@@ -59,8 +65,6 @@ export abstract class OAuth
    * Generates url for user to authorize OAuth access
    */
   signIn(redirectUri: string, scope?: string[], state?: string): string {
-    if (typeof this.credentials === "undefined") throw new NoCredentialsError();
-
     redirectUri;
     scope;
     state;
@@ -75,9 +79,6 @@ export abstract class OAuth
     code: string,
     headers: RequestHeaders = {},
   ): Promise<void> {
-    // Require credentials
-    if (typeof this.credentials === "undefined") throw new NoCredentialsError();
-
     // Get request data from instance
     const { tokenUrl } = this.endpoints;
     const { clientId, clientSecret, setTokensHandler } = this.credentials;
@@ -115,9 +116,6 @@ export abstract class OAuth
    * Exchanges refresh token for new tokens
    */
   async exchangeRefreshToken(headers: RequestHeaders = {}): Promise<void> {
-    // Require credentials
-    if (typeof this.credentials === "undefined") throw new NoCredentialsError();
-
     // Get request data from instance
     const { tokenUrl } = this.endpoints;
     const { clientId, clientSecret, setTokensHandler, getTokensHandler } =
@@ -156,9 +154,6 @@ export abstract class OAuth
    * Revoke authorization if possible
    */
   async revoke(headers: RequestHeaders = {}): Promise<void> {
-    // Require credentials
-    if (typeof this.credentials === "undefined") throw new NoCredentialsError();
-
     // Get request data from instance
     const { revokeUrl } = this.endpoints;
 
@@ -187,10 +182,8 @@ export abstract class OAuth
    */
   async request<TResult extends ResponseBody>(
     url: RequestUrl,
-    { method = "GET", headers = {}, body = "" }: Request = {},
+    { method = "GET", headers = {}, body = "" }: RequestOptions = {},
   ): Promise<TResult> {
-    if (typeof this.credentials === "undefined") throw new NoCredentialsError();
-
     const { accessToken } = await this.credentials.getTokensHandler();
 
     // check that we have config
@@ -205,6 +198,10 @@ export abstract class OAuth
     // if the token has expired, refresh and try again
     await this.exchangeRefreshToken();
     await this.request(url, { method, headers, body });
+
+    // handle errors
+    const error = {} as TError;
+    error;
 
     return {} as TResult;
   }

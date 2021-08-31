@@ -1,15 +1,18 @@
 import crypto from "crypto";
-import { AuthMethod, RequestUrl, ResponseBody } from "@crypto-connect/common";
-import { NoCredentialsError, ServerError } from "@crypto-connect/errors";
+import { ApiKeys, RequestOptions, RequestUrl } from "@crypto-connect/common";
+import { CoinbaseProError } from "./coinbase-pro-types";
 
 /**
  * Make authenticated requests to Coinbase Pro with Api Keys
  */
-export class CoinbaseProApiKeys extends AuthMethod<{
-  apiKey: string;
-  apiSecret: string;
-  passphrase: string;
-}> {
+export class CoinbaseProApiKeys extends ApiKeys<
+  {
+    apiKey: string;
+    apiSecret: string;
+    passphrase: string;
+  },
+  CoinbaseProError
+> {
   /**
    * Return current timestamp in seconds
    * Used as nonce when signing request
@@ -44,21 +47,19 @@ export class CoinbaseProApiKeys extends AuthMethod<{
   }
 
   /**
-   * Make authenticated request to Coinbase Pro
+   * Sign requests to Coinbase
    */
-  async request<TResult extends ResponseBody>(
-    url: RequestUrl,
-  ): Promise<TResult> {
-    // Require credentials
-    if (typeof this.credentials === "undefined") throw new NoCredentialsError();
+  signRequest(url: RequestUrl): [RequestUrl, RequestOptions] {
+    // Only support GET requests
+    const method = "GET";
+    const body = "";
 
     // Get request data from instance
     const { apiKey, apiSecret, passphrase } = this.credentials;
-    const { requestHandler } = this.context;
 
     // Process request data
     const timestamp = CoinbaseProApiKeys.getTimestamp();
-    const message = CoinbaseProApiKeys.getMessage(timestamp, "GET", url);
+    const message = CoinbaseProApiKeys.getMessage(timestamp, method, url);
     const signature = CoinbaseProApiKeys.getSignature(message, apiSecret);
 
     const headers = {
@@ -70,21 +71,6 @@ export class CoinbaseProApiKeys extends AuthMethod<{
       "CB-ACCESS-PASSPHRASE": `${passphrase}`,
     };
 
-    // Execute the request
-    const response = await requestHandler(url, {
-      headers,
-    });
-
-    // Handle non-200 status
-    if (response.status !== 200) {
-      console.error(response.body);
-      throw new ServerError(
-        response.status || 0,
-        JSON.stringify(response.body),
-      );
-    }
-
-    // Return payload
-    return response.body as TResult;
+    return [url, { method, headers, body }];
   }
 }

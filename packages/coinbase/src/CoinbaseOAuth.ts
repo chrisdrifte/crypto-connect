@@ -1,3 +1,4 @@
+import { CoinbaseError } from "./coinbase-types";
 import { OAuth } from "@crypto-connect/common";
 
 /**
@@ -16,6 +17,6 @@ const ENDPOINTS = {
 /**
  * Make authenticated requests to Coinbase with OAuth
  */
-export class CoinbaseOAuth extends OAuth {
+export class CoinbaseOAuth extends OAuth<CoinbaseError> {
   endpoints = ENDPOINTS;
 }

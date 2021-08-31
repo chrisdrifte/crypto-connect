@@ -7,6 +7,7 @@ export type CoinbaseProRequestBody = Record<string, string> | string;
  * @see https://docs.pro.coinbase.com/#errors
  */
 export interface CoinbaseProError {
+  [key: string]: string;
   message: string;
 }
 
@@ -14,6 +15,7 @@ export interface CoinbaseProError {
  * @see https://docs.pro.coinbase.com/#accounts
  */
 export type CoinbaseProAccount = {
+  [key: string]: string;
   id: string;
   currency: string;
   balance: string;

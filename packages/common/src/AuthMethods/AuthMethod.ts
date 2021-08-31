@@ -1,4 +1,5 @@
 import { BaseConnectionContext } from "../types";
+import { NoCredentialsError } from "@crypto-connect/errors";
 
 /**
  * Properties required by all auth methods
@@ -54,7 +55,11 @@ export abstract class AuthMethod<
   /**
    * Private credentials getter
    */
-  get credentials(): TCredentials | undefined {
+  get credentials(): TCredentials {
+    if (typeof this._credentials === "undefined") {
+      throw new NoCredentialsError();
+    }
+
     return this._credentials;
   }
 

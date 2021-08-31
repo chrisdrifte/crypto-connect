@@ -1,3 +1,5 @@
+import { RequestBody } from "@crypto-connect/common";
+
 /**
  * @see https://developers.coinbase.com/api/v2#making-requests
  */
@@ -6,11 +8,12 @@ export type CoinbaseRequestBody = Record<string, string> | string;
 /**
  * @see https://developers.coinbase.com/api/v2#errors
  */
-export interface CoinbaseError {
+export type CoinbaseError = {
+  [key: string]: string | undefined;
   id: string;
   message: string;
   url?: string;
-}
+};
 
 /**
  * @see https://developers.coinbase.com/api/v2#pagination
@@ -25,7 +28,7 @@ export interface CoinbasePaginatedResource<TData = unknown>
     previous_uri: string | null;
     next_uri: string | null;
   };
-  data: TData[] | { errors: CoinbaseError[] };
+  data: TData[];
   warnings?: CoinbaseError[];
 }
 

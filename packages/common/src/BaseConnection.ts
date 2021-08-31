@@ -1,5 +1,5 @@
 import crossFetch from "cross-fetch";
-import { BaseConnectionContext, BaseConnectionInterface } from "./types";
+import { BaseConnectionInterface } from "./types";
 import { crossFetchAdaptor } from "./adaptors/requestHandlers/crossFetchAdaptor";
 
 /**
@@ -7,7 +7,7 @@ import { crossFetchAdaptor } from "./adaptors/requestHandlers/crossFetchAdaptor"
  */
 export abstract class BaseConnection implements BaseConnectionInterface {
   // default context is provided
-  context: BaseConnectionContext = {
+  context = {
     requestHandler: crossFetchAdaptor(crossFetch),
   };
 

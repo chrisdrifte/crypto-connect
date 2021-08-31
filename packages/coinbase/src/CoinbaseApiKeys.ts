@@ -1,11 +1,19 @@
 import * as crypto from "crypto";
-import { APIKeys, RequestUrl, ResponseBody } from "@crypto-connect/common";
-import { NoCredentialsError, ServerError } from "@crypto-connect/errors";
+import { CoinbaseError } from "./coinbase-types";
+import {
+  ApiKeys,
+  RequestUrl,
+  ApiKeysCredentials,
+  RequestOptions,
+} from "@crypto-connect/common";
 
 /**
  * Make authenticated requests to Coinbase with Api Keys
  */
-export class CoinbaseAPIKeys extends APIKeys {
+export class CoinbaseAPIKeys extends ApiKeys<
+  ApiKeysCredentials,
+  CoinbaseError
+> {
   /**
    * Return current timestamp in seconds
    * Used as nonce when signing request
@@ -41,21 +49,19 @@ export class CoinbaseAPIKeys extends APIKeys {
   }
 
   /**
-   * Make authenticated request to Coinbase
+   * Sign requests to Coinbase
    */
-  async request<TResult extends ResponseBody>(
-    url: RequestUrl,
-  ): Promise<TResult> {
-    // Require credentials
-    if (typeof this.credentials === "undefined") throw new NoCredentialsError();
+  signRequest(url: RequestUrl): [RequestUrl, RequestOptions] {
+    // Only support GET requests
+    const method = "GET";
+    const body = "";
 
     // Get request data from instance
     const { apiKey, apiSecret } = this.credentials;
-    const { requestHandler } = this.context;
 
     // Process request data
     const timestamp = CoinbaseAPIKeys.getTimestamp();
-    const message = CoinbaseAPIKeys.getMessage(timestamp, "GET", url);
+    const message = CoinbaseAPIKeys.getMessage(timestamp, method, url, body);
     const signature = CoinbaseAPIKeys.getSignature(message, apiSecret);
 
     const headers = {
@@ -66,21 +72,6 @@ export class CoinbaseAPIKeys extends APIKeys {
       "CB-VERSION": "2015-07-22",
     };
 
-    // Execute the request
-    const response = await requestHandler(url, {
-      headers,
-    });
-
-    // Handle non-200 status
-    if (response.status !== 200) {
-      console.error(response.body);
-      throw new ServerError(
-        response.status || 0,
-        JSON.stringify(response.body),
-      );
-    }
-
-    // Return payload
-    return response.body as TResult;
+    return [url, { method, headers, body }];
   }
 }

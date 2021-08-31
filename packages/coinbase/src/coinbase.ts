@@ -1,3 +1,4 @@
+import { BadResponseError, NotAuthorizedError } from "@crypto-connect/errors";
 import { CoinbaseAccount, CoinbasePaginatedResource } from "./coinbase-types";
 import { CoinbaseAPIKeys } from "./CoinbaseApiKeys";
 import { CoinbaseOAuth } from "./CoinbaseOAuth";
@@ -6,11 +7,6 @@ import {
   CryptoBalance,
   BaseConnectionSecure,
 } from "@crypto-connect/common";
-import {
-  ClientError,
-  NotAuthorizedError,
-  BadResponseError,
-} from "@crypto-connect/errors";
 
 /**
  * Array of scopes required to use this package
@@ -120,15 +116,6 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<CoinbaseAuthMethods>
       // @see https://developers.coinbase.com/api/v2#warnings
       if (result.warnings) {
         console.warn(result.warnings);
-      }
-
-      if (!(result.data instanceof Array)) {
-        if (result.data.errors instanceof Array) {
-          console.error(result.data.errors);
-          throw new ClientError(result.data.errors[0].message);
-        }
-
-        throw new BadResponseError();
       }
 
       // add data to list of items

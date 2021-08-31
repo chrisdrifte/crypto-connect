@@ -33,7 +33,7 @@ class CoinbaseProConnectionSecure extends BaseConnectionSecure<CoinbaseProAuthMe
   auth = {
     apiKeys: new CoinbaseProApiKeys(this.context),
   };
-
+  
   /**
    * Use the `ApiKeys` auth method to authorize requests
    */
