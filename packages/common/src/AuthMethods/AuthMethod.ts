@@ -10,12 +10,26 @@ export abstract class AuthMethod<
 > implements AuthMethodInterface<TCredentials, TContext>
 {
   // credentials will be available on the instance
-  credentials?: TCredentials;
+  _credentials?: TCredentials;
 
   // some plugins might override this with custom logic
   // for example to validate or transform credentials
   setCredentials(credentials: TCredentials): void {
-    this.credentials = credentials;
+    this._credentials = credentials;
+  }
+
+  get credentials(): TCredentials | undefined {
+    return this._credentials;
+  }
+
+  set credentials(credentials: TCredentials | undefined) {
+    if (typeof this._credentials !== "undefined") {
+      throw new Error(
+        "For security reasons, do not set credentials more than once on each instance",
+      );
+    }
+
+    this._credentials = credentials;
   }
 
   // inject context in the constructor
