@@ -24,7 +24,7 @@ async function getCoinbaseProBalances(
   });
 
   // Get balances
-  const balances = coinbasePro.getBalances();
+  const balances = await coinbasePro.getBalances();
 
   return balances;
 }
