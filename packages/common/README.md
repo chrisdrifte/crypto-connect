@@ -54,7 +54,7 @@ import { ApiKeys, RequestUrl, RequestOptions } from "@crypto-connect/common";
 /**
  * Make authenticated requests with Api Keys
  */
-export class CoinbaseAPIKeys extends ApiKeys<
+export class ExampleAPIKeys extends ApiKeys<
   // service credentials
   {
     apiKey: string;

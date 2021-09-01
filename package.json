@@ -10,15 +10,15 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "prepare": "husky install && yarn boot",
     "boot": "yarn global add lerna && lerna bootstrap",
-    "start": "lerna exec yarn start",
     "lint": "eslint ./packages --ext .ts,.tsx",
     "lint:staged": "lint-staged",
     "test": "yarn build && jest --group=-integration",
     "test:watch": "yarn build && jest --watch --group=-integration",
     "test:integration": "yarn build && jest --group=integration",
-    "prepare": "husky install",
-    "build": "lerna run build --stream"
+    "build": "lerna run build --stream",
+    "start": "lerna exec yarn start"
   },
   "devDependencies": {
     "@types/jest": "^27.0.1",

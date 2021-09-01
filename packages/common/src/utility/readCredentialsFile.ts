@@ -1,4 +1,4 @@
-import fs from "fs";
+import * as fs from "fs";
 
 /**
  * Reads a file and splits content into an array of lines

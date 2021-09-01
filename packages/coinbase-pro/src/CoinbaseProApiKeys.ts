@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import * as crypto from "crypto";
 import { ApiKeys, RequestOptions, RequestUrl } from "@crypto-connect/common";
 import { CoinbaseProError } from "./coinbase-pro-types";
 

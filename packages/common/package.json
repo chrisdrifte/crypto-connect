@@ -5,6 +5,7 @@
   "author": "chrisdrifte <chrisdrifte@gmail.com>",
   "license": "ISC",
   "main": "dist/index.js",
+  "types": "dist/index.d.js",
   "directories": {
     "src": "src",
     "test": "__tests__"
@@ -13,7 +14,10 @@
     "dist"
   ],
   "scripts": {
-    "build": "rm -rf dist/* && tsc"
+    "build": "yarn clean && yarn compile",
+    "clean": "rm -rf ./dist && rm -rf tsconfig.build.tsbuildinfo",
+    "compile": "tsc -b tsconfig.build.json",
+    "prepublishOnly": "yarn build"
   },
   "dependencies": {
     "@crypto-connect/errors": "^0.0.1",

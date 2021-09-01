@@ -1,17 +1,16 @@
 {
+  "extends": "../../tsconfig",
   "compilerOptions": {
-    "target": "es5",
-    "module": "CommonJS",
     "declaration": true,
-    "outDir": "dist",
-    "rootDir": "src",
+    "declarationMap": true,
+
+    "sourceMap": true,
+    "composite": true,
+
     "noEmit": false,
-    "strict": true,
-    "noImplicitAny": false,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "outDir": "dist",
+    "rootDir": "src"
   },
   "include": ["src"],
-  "exclude": ["**/*.spec.ts", "**/*.test.ts", "**/*.integration.ts"]
+  "references": [{ "path": "../common" }, { "path": "../errors" }]
 }
