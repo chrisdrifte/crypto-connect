@@ -7,6 +7,7 @@ module.exports = {
   projects: [
     "<rootDir>/packages/coinbase-pro",
     "<rootDir>/packages/coinbase",
+    "<rootDir>/packages/kraken",
     "<rootDir>/packages/common",
     "<rootDir>/packages/errors",
   ],

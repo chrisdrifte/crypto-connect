@@ -37,9 +37,11 @@ export const crossFetchAdaptor: RequestHandlerAdaptor =
       headers[key] = value;
     });
 
+    const responseBody = await response.json();
+
     return {
       status: response.status,
       headers: responseHeaders,
-      body: await response.json(),
+      body: responseBody,
     };
   };
