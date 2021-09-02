@@ -5,6 +5,7 @@ module.exports = {
   ...base,
   roots: ["<rootDir>"],
   projects: [
+    "<rootDir>/packages/binance",
     "<rootDir>/packages/coinbase-pro",
     "<rootDir>/packages/coinbase",
     "<rootDir>/packages/kraken",

@@ -1,0 +1,32 @@
+{
+  "name": "@crypto-connect/binance",
+  "version": "0.0.1",
+  "description": "Connect to Binance API",
+  "author": "chrisdrifte <chrisdrifte@gmail.com>",
+  "license": "ISC",
+  "main": "dist/Binance.js",
+  "types": "dist/Binance.d.ts",
+  "directories": {
+    "src": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn clean && yarn compile",
+    "clean": "rm -rf ./dist && rm -rf tsconfig.build.tsbuildinfo",
+    "compile": "tsc -b tsconfig.build.json",
+    "prepublishOnly": "yarn build"
+  },
+  "dependencies": {
+    "@crypto-connect/common": "^0.0.1",
+    "@crypto-connect/errors": "^0.0.1",
+    "big.js": "^6.1.1"
+  },
+  "devDependencies": {
+    "@types/big.js": "^6.1.1",
+    "@types/node": "^16.7.6",
+    "typescript": "^4.4.2"
+  }
+}
