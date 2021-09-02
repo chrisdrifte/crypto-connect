@@ -1,7 +1,11 @@
-import { KrakenAccount, KrakenError, KrakenResponseBody } from "./kraken-types";
 import { KrakenApiKeys } from "./KrakenApiKeys";
 import { ServerError } from "@crypto-connect/errors/src";
 import { UndocumentedResultError } from "@crypto-connect/errors/src";
+import {
+  KrakenAccounts,
+  KrakenError,
+  KrakenResponseBody,
+} from "./kraken-types";
 import {
   AuthMethodCredentials,
   CryptoBalance,
@@ -57,10 +61,10 @@ class KrakenConnectionSecure extends BaseConnectionSecure<KrakenAuthMethods> {
   /**
    * Get raw data for Kraken accounts
    */
-  async getAccounts(): Promise<KrakenAccount> {
+  async getAccounts(): Promise<KrakenAccounts> {
     const endpoint = ENDPOINTS.accounts;
     const result = await this.auth.apiKeys.request<
-      KrakenResponseBody<KrakenAccount>
+      KrakenResponseBody<KrakenAccounts>
     >(endpoint);
 
     KrakenConnectionSecure.throwIfErrorResult(result);

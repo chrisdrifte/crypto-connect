@@ -22,4 +22,4 @@ export interface KrakenError {
 /**
  * @see https://docs.kraken.com/rest/#tag/User-Data
  */
-export type KrakenAccount = Record<string, string>;
+export type KrakenAccounts = Record<string, string>;

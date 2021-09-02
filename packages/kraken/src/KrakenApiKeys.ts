@@ -39,7 +39,8 @@ export class KrakenApiKeys extends ApiKeys<
     const hash_digest = crypto
       .createHash("sha256")
       .update(request.nonce + message)
-      .digest(<crypto.BinaryToTextEncoding>"latin1");
+      .digest()
+      .toString("latin1");
 
     const hmac_digest = crypto
       .createHmac("sha512", secret_buffer)
