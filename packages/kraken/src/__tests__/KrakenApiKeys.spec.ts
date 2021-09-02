@@ -1,17 +1,13 @@
 /**
- * Coinbase Pro
+ * Kraken
  *
- * @group coinbase-pro
+ * @group kraken-api-keys
  * @group unit
  */
 
-describe("Coinbase Pro API Keys and Passphrase", () => {
-  describe("getTimestamp()", () => {
+describe("Kraken API Keys and Passphrase", () => {
+  describe("getNonce()", () => {
     it.todo("should return the time in seconds");
-  });
-
-  describe("getMessage()", () => {
-    it.todo("should return the concated arguments");
   });
 
   describe("getSignature()", () => {
