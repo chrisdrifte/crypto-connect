@@ -1,7 +1,7 @@
 /**
  * Kraken
  *
- * @group kraken-api-keys
+ * @group kraken
  * @group unit
  */
 

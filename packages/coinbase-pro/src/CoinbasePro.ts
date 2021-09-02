@@ -13,14 +13,14 @@ import {
 const BASE_URL = "https://api.pro.coinbase.com";
 
 /**
- * Coinbase Request Endpoints
+ * Coinbase Pro Request Endpoints
  */
 const ENDPOINTS = {
   accounts: `${BASE_URL}/accounts`,
 };
 
 /**
- * Coinbase API Auth Methods
+ * Coinbase Pro API Auth Methods
  */
 type CoinbaseProAuthMethods = {
   apiKeys: CoinbaseProApiKeys;

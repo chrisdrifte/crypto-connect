@@ -1,10 +1,10 @@
 /**
- * Coinbase Pro
+ * Kraken
  *
- * @group coinbase-pro
+ * @group kraken
  * @group unit
  */
-describe("Coinbase Pro", () => {
+describe("Kraken", () => {
   describe("instance", () => {
     it.todo("should have apikey auth initialized with context");
   });
