@@ -9,9 +9,12 @@ describe("Binance", () => {
     it.todo("should have apikey auth initialized with context");
   });
 
-  describe("static throwIfErrorResult()", () => {
-    it.todo("should throw if error property is array with at least one item");
-    it.todo("should not throw if error property is empty array");
+  describe("throwErrorOnInvalidPermissions()", () => {
+    it.todo("should throw error with unexpected response");
+    it.todo("should make single request");
+    it.todo("should throw error with missing read permission");
+    it.todo("should not throw error with extra permissions");
+    it.todo("should not throw error with exact permissions");
   });
 
   describe("withApiKeys()", () => {
@@ -19,13 +22,8 @@ describe("Binance", () => {
     it.todo("should be chainable");
   });
 
-  describe("getAccounts()", () => {
-    it.todo("should throw error with error responses");
-    it.todo("should throw error with unexpected responses");
-    it.todo("should return accounts");
-  });
-
   describe("getBalances()", () => {
+    it.todo("should throw error with unexpected responses");
     it.todo("should return normalized balances");
   });
 });

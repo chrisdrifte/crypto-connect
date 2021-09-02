@@ -6,7 +6,7 @@
  */
 
 describe("Binance API Keys and Passphrase", () => {
-  describe("getNonce()", () => {
+  describe("getTimestamp()", () => {
     it.todo("should return the time in seconds");
   });
 
