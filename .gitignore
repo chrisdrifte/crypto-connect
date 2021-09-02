@@ -8,3 +8,4 @@ dist
 .client
 
 .DS_Store
+.log
