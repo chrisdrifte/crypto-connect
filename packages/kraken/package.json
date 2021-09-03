@@ -4,8 +4,8 @@
   "description": "Connect to Kraken API",
   "author": "chrisdrifte <chrisdrifte@gmail.com>",
   "license": "ISC",
-  "main": "dist/Kraken.js",
-  "types": "dist/Kraken.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "directories": {
     "src": "src",
     "test": "__tests__"

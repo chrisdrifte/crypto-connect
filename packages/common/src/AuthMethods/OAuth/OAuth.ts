@@ -5,7 +5,6 @@ import {
   RequestHeaders,
   RequestUrl,
   ResponseBody,
-  RequestBody,
 } from "../../types";
 
 /**
@@ -52,7 +51,7 @@ interface OAuthInterface extends AuthMethod<OAuthCredentials> {
 /**
  * Authorized requests with OAuth
  */
-export abstract class OAuth<TError = RequestBody>
+export abstract class OAuth
   extends AuthMethod<OAuthCredentials>
   implements OAuthInterface
 {
@@ -204,9 +203,7 @@ export abstract class OAuth<TError = RequestBody>
     await this.exchangeRefreshToken();
     await this.request(url, { method, headers, body });
 
-    // handle errors
-    const error = {} as TError;
-    error;
+    // handle non-200 status
 
     return {} as TResult;
   }

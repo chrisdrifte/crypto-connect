@@ -1,4 +1,4 @@
-import { CoinbaseAPIKeys } from "./CoinbaseApiKeys";
+import { CoinbaseApiKeys } from "./CoinbaseApiKeys";
 import { CoinbaseOAuth } from "./CoinbaseOAuth";
 import {
   CoinbaseAccount,
@@ -10,7 +10,6 @@ import {
   ForbiddenError,
 } from "@crypto-connect/errors";
 import {
-  AuthMethodCredentials,
   CryptoBalance,
   BaseConnectionSecure,
   getMissingItems,
@@ -38,42 +37,17 @@ const ENDPOINTS = {
 /**
  * Coinbase API Auth Methods
  */
-type CoinbaseAuthMethods = {
-  apiKeys: CoinbaseAPIKeys;
-  oauth: CoinbaseOAuth;
-};
+type CoinbaseAuth = CoinbaseApiKeys | CoinbaseOAuth;
 
 /**
  * Coinbase API Client
  */
-class CoinbaseConnectionSecure extends BaseConnectionSecure<CoinbaseAuthMethods> {
-  // create auth method instances with context
-  auth = {
-    apiKeys: new CoinbaseAPIKeys(this.context),
-    oauth: new CoinbaseOAuth(this.context),
-  };
-
-  // store the current auth method (whichever was last configured)
-  currentAuth: CoinbaseAPIKeys | CoinbaseOAuth = this.auth.apiKeys;
-
+class CoinbaseConnectionSecure extends BaseConnectionSecure<CoinbaseAuth> {
   /**
-   * Use the `ApiKeys` auth method to authorize requests
+   * Supply auth in constructor
    */
-  withApiKeys(apiKeys: AuthMethodCredentials<CoinbaseAPIKeys>): this {
-    this.auth.apiKeys.setCredentials(apiKeys);
-    this.currentAuth = this.auth.apiKeys;
-
-    return this;
-  }
-
-  /**
-   * Use the `OAuth` auth method to authorize requests
-   */
-  withOAuth(credentials: AuthMethodCredentials<CoinbaseOAuth>): this {
-    this.auth.oauth.setCredentials(credentials);
-    this.currentAuth = this.auth.oauth;
-
-    return this;
+  constructor(protected auth: CoinbaseAuth) {
+    super();
   }
 
   /**
@@ -81,9 +55,9 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<CoinbaseAuthMethods>
    */
   async throwErrorOnInvalidPermissions(): Promise<void> {
     const endpoint = ENDPOINTS.permissions;
-    const result = await this.currentAuth.request<CoinbasePermissions>(
-      endpoint,
-    );
+    const result = await this.auth.request<CoinbasePermissions>(endpoint);
+
+    this.auth;
 
     if (!(result?.scopes instanceof Array)) {
       throw new UndocumentedResultError(
@@ -116,9 +90,9 @@ class CoinbaseConnectionSecure extends BaseConnectionSecure<CoinbaseAuthMethods>
     let items: TItem[] = [];
 
     while (endpoint !== null) {
-      const result = await this.currentAuth.request<
-        CoinbasePaginatedResource<TItem>
-      >(endpoint);
+      const result = await this.auth.request<CoinbasePaginatedResource<TItem>>(
+        endpoint,
+      );
 
       // handle errors
       if (

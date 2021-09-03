@@ -1,17 +1,13 @@
 import * as crypto from "crypto";
 import { ApiKeys, RequestOptions, RequestUrl } from "@crypto-connect/common";
-import { BinanceError } from "./binance-types";
 
 /**
  * Make authenticated requests to Binance with Api Keys
  */
-export class BinanceApiKeys extends ApiKeys<
-  {
-    apiKey: string;
-    apiSecret: string;
-  },
-  BinanceError
-> {
+export class BinanceApiKeys extends ApiKeys<{
+  apiKey: string;
+  apiSecret: string;
+}> {
   /**
    * Return current timestamp in seconds
    * Used as nonce when signing request

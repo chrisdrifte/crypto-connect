@@ -1,5 +1,4 @@
 import * as crypto from "crypto";
-import { CoinbaseError } from "./coinbase-types";
 import {
   ApiKeys,
   RequestUrl,
@@ -10,10 +9,7 @@ import {
 /**
  * Make authenticated requests to Coinbase with Api Keys
  */
-export class CoinbaseAPIKeys extends ApiKeys<
-  ApiKeysCredentials,
-  CoinbaseError
-> {
+export class CoinbaseApiKeys extends ApiKeys<ApiKeysCredentials> {
   /**
    * Return current timestamp in seconds
    * Used as nonce when signing request
@@ -60,9 +56,9 @@ export class CoinbaseAPIKeys extends ApiKeys<
     const { apiKey, apiSecret } = this.credentials;
 
     // Process request data
-    const timestamp = CoinbaseAPIKeys.getTimestamp();
-    const message = CoinbaseAPIKeys.getMessage(timestamp, method, url, body);
-    const signature = CoinbaseAPIKeys.getSignature(message, apiSecret);
+    const timestamp = CoinbaseApiKeys.getTimestamp();
+    const message = CoinbaseApiKeys.getMessage(timestamp, method, url, body);
+    const signature = CoinbaseApiKeys.getSignature(message, apiSecret);
 
     const headers = {
       "Content-Type": "application/json",

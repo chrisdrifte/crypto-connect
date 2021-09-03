@@ -9,23 +9,17 @@
 ## Usage
 
 ```ts
-import { Coinbase } from "@crypto-connect/coinbase";
+import coinbaseConnect from "@crypto-connect/coinbase";
 
-async function getCoinbaseBalances(apiKey: string, apiSecret: string) {
-  // Authorise
-  const coinbase = new Coinbase().withApiKeys({
-    apiKey: "XXX",
-    apiSecret: "YYY",
-  });
+// Authorise
+const coinbase = coinbaseConnect.withApiKeys({
+  apiKey: "XXX",
+  apiSecret: "YYY",
+  passphrase: "ZZZ",
+});
 
-  // Optionally check permissions associated with credentials are correct
-  await coinbase.throwErrorOnInvalidPermissions();
-
-  // Get balances
-  const balances = await coinbase.getBalances();
-
-  return balances;
-}
+// Get balances
+const balances = await coinbase.getBalances();
 ```
 
 ## Links

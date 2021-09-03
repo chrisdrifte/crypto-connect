@@ -9,23 +9,15 @@
 ## Usage
 
 ```ts
-import { CoinbasePro } from "@crypto-connect/coinbase-pro";
+import coinbaseProConnect from "@crypto-connect/coinbase-pro";
 
-async function getCoinbaseProBalances(
-  apiKey: string,
-  apiSecret: string,
-  passphrase: string,
-) {
-  // Authorise
-  const coinbasePro = new CoinbasePro().withApiKeys({
-    apiKey: "XXX",
-    apiSecret: "YYY",
-    passphrase: "ZZZ",
-  });
+// Authorise
+const coinbasePro = coinbaseProConnect.withApiKeys({
+  apiKey: "XXX",
+  apiSecret: "YYY",
+  passphrase: "ZZZ",
+});
 
-  // Get balances
-  const balances = await coinbasePro.getBalances();
-
-  return balances;
-}
+// Get balances
+const balances = await coinbasePro.getBalances();
 ```

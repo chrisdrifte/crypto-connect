@@ -1,22 +1,8 @@
 /**
- * Context required by all connections
- */
-export type BaseConnectionContext = { requestHandler: RequestHandler };
-
-/**
  * Methods required by all connections
  */
 export interface BaseConnectionInterface {
-  context: BaseConnectionContext;
   getBalances(): Promise<CryptoBalance[]>;
-}
-
-/**
- * Methods required by all connections that implement authorization
- */
-export interface BaseConnectionSecureInterface<TAuth>
-  extends BaseConnectionInterface {
-  auth: TAuth;
 }
 
 /**

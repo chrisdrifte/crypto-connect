@@ -1,11 +1,7 @@
+import { BaseConnectionSecure, CryptoBalance } from "@crypto-connect/common";
 import { CoinbaseProAccount } from "./coinbase-pro-types";
 import { CoinbaseProApiKeys } from "./CoinbaseProApiKeys";
 import { UndocumentedResultError } from "@crypto-connect/errors";
-import {
-  AuthMethodCredentials,
-  CryptoBalance,
-  BaseConnectionSecure,
-} from "@crypto-connect/common";
 
 /**
  * Coinbase Pro API Base URL
@@ -22,26 +18,17 @@ const ENDPOINTS = {
 /**
  * Coinbase Pro API Auth Methods
  */
-type CoinbaseProAuthMethods = {
-  apiKeys: CoinbaseProApiKeys;
-};
+type CoinbaseProAuth = CoinbaseProApiKeys;
 
 /**
  * Coinbase Pro API Client
  */
-class CoinbaseProConnectionSecure extends BaseConnectionSecure<CoinbaseProAuthMethods> {
-  // create auth method instances with context
-  auth = {
-    apiKeys: new CoinbaseProApiKeys(this.context),
-  };
-
+class CoinbaseProConnectionSecure extends BaseConnectionSecure<CoinbaseProAuth> {
   /**
-   * Use the `ApiKeys` auth method to authorize requests
+   * Supply auth in constructor
    */
-  withApiKeys(credentials: AuthMethodCredentials<CoinbaseProApiKeys>): this {
-    this.auth.apiKeys.setCredentials(credentials);
-
-    return this;
+  constructor(protected auth: CoinbaseProAuth) {
+    super();
   }
 
   /**
@@ -49,9 +36,7 @@ class CoinbaseProConnectionSecure extends BaseConnectionSecure<CoinbaseProAuthMe
    */
   async getAccounts(): Promise<CoinbaseProAccount[]> {
     const endpoint = ENDPOINTS.accounts;
-    const accounts = await this.auth.apiKeys.request<CoinbaseProAccount[]>(
-      endpoint,
-    );
+    const accounts = await this.auth.request<CoinbaseProAccount[]>(endpoint);
 
     if (!(accounts instanceof Array)) {
       throw new UndocumentedResultError(

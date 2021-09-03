@@ -1,15 +1,13 @@
 import { AuthMethod } from "./AuthMethods/AuthMethod";
 import { BaseConnection } from "./BaseConnection";
-import { BaseConnectionSecureInterface } from "./types";
+import { BaseConnectionInterface } from "./types";
 
 /**
  * A connection to a service which implements authorization
  */
-export abstract class BaseConnectionSecure<
-    TAuth extends Record<string, AuthMethod>,
-  >
+export abstract class BaseConnectionSecure<TAuth extends AuthMethod>
   extends BaseConnection
-  implements BaseConnectionSecureInterface<TAuth>
+  implements BaseConnectionInterface
 {
-  abstract auth: TAuth;
+  protected abstract auth: TAuth;
 }
