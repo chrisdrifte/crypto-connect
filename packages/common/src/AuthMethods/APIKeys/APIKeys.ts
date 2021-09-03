@@ -1,6 +1,6 @@
 import { AuthMethod, BaseCredentials } from "../AuthMethod";
 import { RequestOptions, RequestUrl, ResponseBody } from "../../types";
-import { ServerError } from "../../../../errors/dist";
+import { ServerError } from "@crypto-connect/errors/dist";
 
 /**
  * Generic API key credentials
