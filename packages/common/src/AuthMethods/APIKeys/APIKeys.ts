@@ -1,11 +1,6 @@
 import { AuthMethod, BaseCredentials } from "../AuthMethod";
+import { RequestOptions, RequestUrl, ResponseBody } from "../../types";
 import { ServerError } from "../../../../errors/dist";
-import {
-  RequestBody,
-  RequestOptions,
-  RequestUrl,
-  ResponseBody,
-} from "../../types";
 
 /**
  * Generic API key credentials
@@ -30,7 +25,6 @@ export interface ApiKeysInterface extends AuthMethod<ApiKeysCredentials> {
  */
 export abstract class ApiKeys<
     TCredentials extends ApiKeysCredentials = ApiKeysCredentials,
-    TError = RequestBody,
   >
   extends AuthMethod<TCredentials>
   implements ApiKeysInterface
@@ -65,7 +59,7 @@ export abstract class ApiKeys<
 
     // Handle non-200 status
     if (response.status && response.status !== 200) {
-      const error = response.body as TError;
+      const error = response.body;
       throw new ServerError(response.status, JSON.stringify(error));
     }
 

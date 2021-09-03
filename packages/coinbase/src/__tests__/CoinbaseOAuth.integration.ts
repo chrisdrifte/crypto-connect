@@ -1,4 +1,4 @@
-import { Coinbase } from "../Coinbase";
+import coinbaseConnect from "..";
 import { readCredentialsFile } from "@crypto-connect/common";
 
 /**
@@ -14,7 +14,7 @@ const [clientId, clientSecret, devToken] = readCredentialsFile(
 );
 
 const setup = () => ({
-  coinbase: new Coinbase().withOAuth({
+  coinbase: coinbaseConnect.withOAuth({
     clientId,
     clientSecret,
     getTokensHandler: () => {

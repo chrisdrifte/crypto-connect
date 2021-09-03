@@ -1,5 +1,4 @@
 import * as crypto from "crypto";
-import { KrakenError } from "./kraken-types";
 import {
   ApiKeys,
   RequestOptions,
@@ -10,13 +9,10 @@ import {
 /**
  * Make authenticated requests to Kraken with Api Keys
  */
-export class KrakenApiKeys extends ApiKeys<
-  {
-    apiKey: string;
-    apiSecret: string;
-  },
-  KrakenError
-> {
+export class KrakenApiKeys extends ApiKeys<{
+  apiKey: string;
+  apiSecret: string;
+}> {
   /**
    * Return current timestamp in seconds
    * Used as nonce when signing request

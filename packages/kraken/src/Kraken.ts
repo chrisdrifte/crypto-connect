@@ -1,16 +1,12 @@
+import { BaseConnectionSecure, CryptoBalance } from "@crypto-connect/common";
 import { KrakenApiKeys } from "./KrakenApiKeys";
-import { ServerError } from "@crypto-connect/errors/src";
+import { ServerError } from "@crypto-connect/errors";
 import { UndocumentedResultError } from "@crypto-connect/errors/src";
 import {
   KrakenAccounts,
   KrakenError,
   KrakenResponseBody,
 } from "./kraken-types";
-import {
-  AuthMethodCredentials,
-  CryptoBalance,
-  BaseConnectionSecure,
-} from "@crypto-connect/common";
 
 /**
  * Kraken API Base URL
@@ -27,18 +23,18 @@ const ENDPOINTS = {
 /**
  * Kraken Auth Methods
  */
-type KrakenAuthMethods = {
-  apiKeys: KrakenApiKeys;
-};
+type KrakenAuth = KrakenApiKeys;
 
 /**
  * Kraken API Client
  */
-class KrakenConnectionSecure extends BaseConnectionSecure<KrakenAuthMethods> {
-  // create auth method instances with context
-  auth = {
-    apiKeys: new KrakenApiKeys(this.context),
-  };
+class KrakenConnectionSecure extends BaseConnectionSecure<KrakenAuth> {
+  /**
+   * Supply auth in constructor
+   */
+  constructor(protected auth: KrakenAuth) {
+    super();
+  }
 
   /**
    * Handle error responses
@@ -50,22 +46,13 @@ class KrakenConnectionSecure extends BaseConnectionSecure<KrakenAuthMethods> {
   }
 
   /**
-   * Use the `ApiKeys` auth method to authorize requests
-   */
-  withApiKeys(credentials: AuthMethodCredentials<KrakenApiKeys>): this {
-    this.auth.apiKeys.setCredentials(credentials);
-
-    return this;
-  }
-
-  /**
    * Get raw data for Kraken accounts
    */
   async getAccounts(): Promise<KrakenAccounts> {
     const endpoint = ENDPOINTS.accounts;
-    const result = await this.auth.apiKeys.request<
-      KrakenResponseBody<KrakenAccounts>
-    >(endpoint);
+    const result = await this.auth.request<KrakenResponseBody<KrakenAccounts>>(
+      endpoint,
+    );
 
     KrakenConnectionSecure.throwIfErrorResult(result);
 

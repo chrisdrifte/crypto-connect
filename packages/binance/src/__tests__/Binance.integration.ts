@@ -1,4 +1,4 @@
-import { Binance } from "../Binance";
+import binanceConnect from "..";
 import { readCredentialsFile } from "@crypto-connect/common";
 
 /**
@@ -12,7 +12,7 @@ import { readCredentialsFile } from "@crypto-connect/common";
 const [apiKey, apiSecret] = readCredentialsFile(`${__dirname}/.keys`);
 
 const setup = () => ({
-  binance: new Binance().withApiKeys({
+  binance: binanceConnect.withApiKeys({
     apiKey,
     apiSecret,
   }),

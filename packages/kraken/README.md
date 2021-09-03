@@ -9,22 +9,14 @@
 ## Usage
 
 ```ts
-import { Kraken } from "@crypto-connect/kraken";
+import krakenConnect from "@crypto-connect/kraken";
 
-async function getKrakenBalances(
-  apiKey: string,
-  apiSecret: string,
-  passphrase: string,
-) {
-  // Authorise
-  const kraken = new Kraken().withApiKeys({
-    apiKey: "XXX",
-    apiSecret: "YYY",
-  });
+// Authorise
+const kraken = krakenConnect.withApiKeys({
+  apiKey: "XXX",
+  apiSecret: "YYY",
+});
 
-  // Get balances
-  const balances = await kraken.getBalances();
-
-  return balances;
-}
+// Get balances
+const balances = await kraken.getBalances();
 ```

@@ -1,14 +1,20 @@
-import { BaseConnectionContext } from "../types";
+import crossFetch from "cross-fetch";
+import { crossFetchAdaptor } from "../adaptors/requestHandlers/crossFetchAdaptor";
 import { NoCredentialsError } from "@crypto-connect/errors";
+import { RequestHandler } from "../types";
+
+/**
+ * Context required by all auth methods
+ */
+export type AuthMethodContext = { requestHandler: RequestHandler };
 
 /**
  * Properties required by all auth methods
  */
 export interface AuthMethodInterface<
   TCredentials extends BaseCredentials = BaseCredentials,
-  TContext extends BaseConnectionContext = BaseConnectionContext,
 > {
-  context: TContext;
+  context: AuthMethodContext;
   credentials?: TCredentials;
   setCredentials: (credentials: TCredentials) => void;
   request: (...args: any[]) => Promise<any>;
@@ -22,14 +28,8 @@ export type BaseCredentials = Record<string, unknown>;
 /**
  * Helper to get credentials from an auth method
  */
-export type AuthMethodCredentials<A extends AuthMethodInterface<any, any>> =
+export type AuthMethodCredentials<A extends AuthMethodInterface<any>> =
   NonNullable<A["credentials"]>;
-
-/**
- * Helper to get context from an auth method
- */
-export type AuthMethodContext<A extends AuthMethodInterface<any, any>> =
-  NonNullable<A["context"]>;
 
 /**
  * Abstract class for auth methods
@@ -42,22 +42,21 @@ export type AuthMethodContext<A extends AuthMethodInterface<any, any>> =
  */
 export abstract class AuthMethod<
   TCredentials extends BaseCredentials = BaseCredentials,
-  TContext extends BaseConnectionContext = BaseConnectionContext,
-> implements AuthMethodInterface<TCredentials, TContext>
+> implements AuthMethodInterface<TCredentials>
 {
+  /**
+   * Context for requests
+   */
+  context = {
+    requestHandler: crossFetchAdaptor(crossFetch),
+  };
+
   /**
    * Privately stored credentials
    *
    * **DO NOT ACCESS DIRECTLY**
    */
   _credentials?: TCredentials;
-
-  /**
-   * Constructor
-   *
-   * Make context available on instances
-   */
-  constructor(public context: TContext) {}
 
   /**
    * Private credentials getter
@@ -90,8 +89,10 @@ export abstract class AuthMethod<
    *
    * Override if custom validation/transformation needed.
    */
-  setCredentials(credentials: TCredentials): void {
+  setCredentials(credentials: TCredentials): this {
     this.credentials = credentials;
+
+    return this;
   }
 
   /**

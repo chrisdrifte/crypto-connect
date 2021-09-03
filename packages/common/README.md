@@ -6,6 +6,58 @@ to build integrations.
 In general, it's expected for integrations to be created by extending
 `BaseConnectionSecure` with a custom or existing auth method.
 
+# Implementing Custom Connections
+
+```ts
+import { BaseConnectionSecure, CryptoBalance } from "@crypto-connect/common";
+import { ExampleApiKeys } from "./ExampleApiKeys";
+import { ExampleBalances } from "./example-types";
+
+/**
+ * Example API Base URL
+ */
+const BASE_URL = "https://api.example.com";
+
+/**
+ * Example Request Endpoints
+ */
+const ENDPOINTS = {
+  balances: `${BASE_URL}/balances`,
+};
+
+/**
+ * Example Auth Methods
+ */
+type ExampleAuth = ExampleApiKeys;
+
+/**
+ * Example API Client
+ */
+class ExampleConnectionSecure extends BaseConnectionSecure<ExampleAuth> {
+  /**
+   * Supply auth in constructor
+   */
+  constructor(protected auth: ExampleAuth) {
+    super();
+  }
+
+  /**
+   * Get normalized list of Example balances
+   */
+  async getBalances(): Promise<CryptoBalance[]> {
+    const endpoint = ENDPOINTS.accounts;
+    const result = await this.auth.request<ExampleBalances>(endpoint);
+
+    // convert api result to balances
+    // ...
+
+    return balances;
+  }
+}
+
+export { ExampleConnectionSecure as Example };
+```
+
 ## Implementing Custom Auth Methods
 
 ### OAuth

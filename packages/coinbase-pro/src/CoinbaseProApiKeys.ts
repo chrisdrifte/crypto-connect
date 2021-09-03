@@ -1,18 +1,14 @@
 import * as crypto from "crypto";
 import { ApiKeys, RequestOptions, RequestUrl } from "@crypto-connect/common";
-import { CoinbaseProError } from "./coinbase-pro-types";
 
 /**
  * Make authenticated requests to Coinbase Pro with Api Keys
  */
-export class CoinbaseProApiKeys extends ApiKeys<
-  {
-    apiKey: string;
-    apiSecret: string;
-    passphrase: string;
-  },
-  CoinbaseProError
-> {
+export class CoinbaseProApiKeys extends ApiKeys<{
+  apiKey: string;
+  apiSecret: string;
+  passphrase: string;
+}> {
   /**
    * Return current timestamp in seconds
    * Used as nonce when signing request

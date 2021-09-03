@@ -1,4 +1,4 @@
-import { Kraken } from "../Kraken";
+import krakenConnect from "..";
 import { readCredentialsFile } from "@crypto-connect/common";
 
 /**
@@ -12,7 +12,7 @@ import { readCredentialsFile } from "@crypto-connect/common";
 const [apiKey, apiSecret] = readCredentialsFile(`${__dirname}/.keys`);
 
 const setup = () => ({
-  kraken: new Kraken().withApiKeys({
+  kraken: krakenConnect.withApiKeys({
     apiKey,
     apiSecret,
   }),

@@ -1,15 +1,11 @@
 import Big from "big.js";
+import { BaseConnectionSecure, CryptoBalance } from "@crypto-connect/common";
 import { BinanceApiKeys } from "./BinanceApiKeys";
 import { BinanceCoinInfo, BinancePermissions } from "./binance-types";
 import {
   ForbiddenError,
   UndocumentedResultError,
 } from "@crypto-connect/errors";
-import {
-  AuthMethodCredentials,
-  CryptoBalance,
-  BaseConnectionSecure,
-} from "@crypto-connect/common";
 
 // configure big to use 18 decimal places
 Big.DP = 18;
@@ -30,26 +26,17 @@ const ENDPOINTS = {
 /**
  * Binance Auth Methods
  */
-type BinanceAuthMethods = {
-  apiKeys: BinanceApiKeys;
-};
+type BinanceAuth = BinanceApiKeys;
 
 /**
  * Binance API Client
  */
-class BinanceConnectionSecure extends BaseConnectionSecure<BinanceAuthMethods> {
-  // create auth method instances with context
-  auth = {
-    apiKeys: new BinanceApiKeys(this.context),
-  };
-
+class BinanceConnectionSecure extends BaseConnectionSecure<BinanceAuth> {
   /**
-   * Use the `ApiKeys` auth method to authorize requests
+   * Supply auth in constructor
    */
-  withApiKeys(credentials: AuthMethodCredentials<BinanceApiKeys>): this {
-    this.auth.apiKeys.setCredentials(credentials);
-
-    return this;
+  constructor(protected auth: BinanceAuth) {
+    super();
   }
 
   /**
@@ -57,9 +44,7 @@ class BinanceConnectionSecure extends BaseConnectionSecure<BinanceAuthMethods> {
    */
   async throwErrorOnInvalidPermissions(): Promise<void> {
     const endpoint = ENDPOINTS.permissions;
-    const result = await this.auth.apiKeys.request<BinancePermissions>(
-      endpoint,
-    );
+    const result = await this.auth.request<BinancePermissions>(endpoint);
 
     if (
       typeof result === "undefined" ||
@@ -94,7 +79,7 @@ class BinanceConnectionSecure extends BaseConnectionSecure<BinanceAuthMethods> {
    */
   async getBalances(): Promise<CryptoBalance[]> {
     const endpoint = ENDPOINTS.coinInfo;
-    const result = await this.auth.apiKeys.request<BinanceCoinInfo[]>(endpoint);
+    const result = await this.auth.request<BinanceCoinInfo[]>(endpoint);
 
     if (!(result instanceof Array)) {
       throw new UndocumentedResultError(endpoint, "BinanceCoinInfo[]", result);

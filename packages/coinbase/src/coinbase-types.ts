@@ -1,5 +1,3 @@
-import { RequestBody } from "@crypto-connect/common";
-
 /**
  * @see https://developers.coinbase.com/api/v2#making-requests
  */
