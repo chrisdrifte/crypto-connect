@@ -15,7 +15,6 @@ import coinbaseConnect from "@crypto-connect/coinbase";
 const coinbase = coinbaseConnect.withApiKeys({
   apiKey: "XXX",
   apiSecret: "YYY",
-  passphrase: "ZZZ",
 });
 
 // Get balances
