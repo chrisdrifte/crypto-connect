@@ -2,9 +2,9 @@
 
 ## Install
 
-| Exchange | NPM                             | Yarn                               |
-| -------- | ------------------------------- | ---------------------------------- |
-| Coinbase | `npm i @crypto-connect/coinbase | yarn add @crypto-connect/coinbase` |
+| Exchange | NPM                              | Yarn                                |
+| -------- | -------------------------------- | ----------------------------------- |
+| Coinbase | `npm i @crypto-connect/coinbase` | `yarn add @crypto-connect/coinbase` |
 
 ## Usage
 
