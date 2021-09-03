@@ -5,7 +5,7 @@ easy to use API.
 
 # Support
 
-| Service                               | Package Name                    |
+| Service                               | Package Name                    |                                    |
 | ------------------------------------- | ------------------------------- | ---------------------------------- |
 | [Binance](packages/binance)           | `npm i @crypto-connect/binance` | `yarn add @crypto-connect/binance` |
 | [Coinbase](packages/coinbase)         | `@crypto-connect/coinbase`      |

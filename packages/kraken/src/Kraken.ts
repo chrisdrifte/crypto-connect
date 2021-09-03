@@ -1,7 +1,7 @@
 import { BaseConnectionSecure, CryptoBalance } from "@crypto-connect/common";
 import { KrakenApiKeys } from "./KrakenApiKeys";
 import { ServerError } from "@crypto-connect/errors";
-import { UndocumentedResultError } from "@crypto-connect/errors/src";
+import { UndocumentedResultError } from "@crypto-connect/errors";
 import {
   KrakenAccounts,
   KrakenError,
