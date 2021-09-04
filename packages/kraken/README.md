@@ -2,9 +2,9 @@
 
 ## Install
 
-| Exchange | NPM                            | Yarn                              |
-| -------- | ------------------------------ | --------------------------------- |
-| Kraken   | `npm i @crypto-connect/kraken` | `yarn add @crypto-connect/kraken` |
+| Package | NPM                            | Yarn                              |
+| ------- | ------------------------------ | --------------------------------- |
+| Kraken  | `npm i @crypto-connect/kraken` | `yarn add @crypto-connect/kraken` |
 
 ## Usage
 

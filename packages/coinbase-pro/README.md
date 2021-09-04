@@ -2,7 +2,7 @@
 
 ## Install
 
-| Exchange     | NPM                                  | Yarn                                    |
+| Package      | NPM                                  | Yarn                                    |
 | ------------ | ------------------------------------ | --------------------------------------- |
 | Coinbase Pro | `npm i @crypto-connect/coinbase-pro` | `yarn add @crypto-connect/coinbase-pro` |
 

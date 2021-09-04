@@ -2,9 +2,9 @@
 
 ## Install
 
-| Exchange | NPM                             | Yarn                               |
-| -------- | ------------------------------- | ---------------------------------- |
-| Binance  | `npm i @crypto-connect/binance` | `yarn add @crypto-connect/binance` |
+| Package | NPM                             | Yarn                               |
+| ------- | ------------------------------- | ---------------------------------- |
+| Binance | `npm i @crypto-connect/binance` | `yarn add @crypto-connect/binance` |
 
 ## Usage
 

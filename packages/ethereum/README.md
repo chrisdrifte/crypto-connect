@@ -2,9 +2,10 @@
 
 ## Install
 
-| Exchange | NPM                              | Yarn                                |
-| -------- | -------------------------------- | ----------------------------------- |
-| Ethereum | `npm i @crypto-connect/ethereum` | `yarn add @crypto-connect/ethereum` |
+| Package                                     | NPM                              | Yarn                                |
+| ------------------------------------------- | -------------------------------- | ----------------------------------- |
+| Ethereum                                    | `npm i @crypto-connect/ethereum` | `yarn add @crypto-connect/ethereum` |
+| [Web3](https://github.com/ethereum/web3.js) | `npm i Web3`                     | `yarn add Web3`                     |
 
 ## Usage
 
