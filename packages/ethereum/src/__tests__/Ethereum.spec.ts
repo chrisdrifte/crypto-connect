@@ -1,25 +1,11 @@
 /**
- * Coinbase Pro
+ * Ethereum
  *
- * @group coinbase-pro
+ * @group ethereum
  * @group unit
  */
-describe("Coinbase Pro", () => {
+describe("Ethereum", () => {
   describe("instance", () => {
-    it.todo("should have apikey auth initialized with context");
-  });
-
-  describe("withApiKeys()", () => {
-    it.todo("should set credentials");
-    it.todo("should be chainable");
-  });
-
-  describe("getAccounts()", () => {
-    it.todo("should throw error with unexpected responses");
-    it.todo("should return accounts");
-  });
-
-  describe("getBalances()", () => {
-    it.todo("should return normalized balances");
+    it.todo("should have tests");
   });
 });
