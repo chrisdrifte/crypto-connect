@@ -13,13 +13,18 @@ import { readCredentialsFile } from "@crypto-connect/common";
 const [provider] = readCredentialsFile(`${__dirname}/.keys`);
 
 const httpProvider = new Web3.providers.HttpProvider(provider);
-const tokens = [];
+const erc20Tokens = [
+  {
+    name: "BAT",
+    contractAddress: "0x0d8775f648430679a709e98d2b0cb6250d2887ef",
+  },
+];
 
 const setup = () => ({
   ethereum: ethereumConnect({
     web3: new Web3(httpProvider),
-    tokens,
-  }).withWallet("0x52bc44d5378309EE2abF1539BF71dE1b7d7bE3b5"),
+    erc20Tokens,
+  }).withWallet("0x1cf56Fd8e1567f8d663e54050d7e44643aF970Ce"),
 });
 
 describe("Ethereum Integration Tests (Live)", () => {

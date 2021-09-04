@@ -15,3 +15,7 @@ const coinbaseProConnect: CryptoConnect<void, CoinbasePro> = () => ({
 });
 
 export default coinbaseProConnect;
+
+type test = CryptoConnect<void, CoinbasePro>;
+
+let testVar: test;
