@@ -12,7 +12,7 @@
 import coinbaseProConnect from "@crypto-connect/coinbase-pro";
 
 // Authorise
-const coinbasePro = coinbaseProConnect.withApiKeys({
+const coinbasePro = coinbaseProConnect().withApiKeys({
   apiKey: "XXX",
   apiSecret: "YYY",
   passphrase: "ZZZ",

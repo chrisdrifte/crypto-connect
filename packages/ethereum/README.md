@@ -1,23 +1,27 @@
-# Coinbase Pro
+# Etheruem
 
 ## Install
 
-| Exchange     | NPM                                  | Yarn                                    |
-| ------------ | ------------------------------------ | --------------------------------------- |
-| Coinbase Pro | `npm i @crypto-connect/coinbase-pro` | `yarn add @crypto-connect/coinbase-pro` |
+| Exchange | NPM                              | Yarn                                |
+| -------- | -------------------------------- | ----------------------------------- |
+| Etheruem | `npm i @crypto-connect/ethereum` | `yarn add @crypto-connect/ethereum` |
 
 ## Usage
 
 ```ts
-import coinbaseProConnect from "@crypto-connect/coinbase-pro";
+import Web3 from "web3";
+import ethereumConnect from "@crypto-connect/ethereum";
+
+// Set up Web3
+const httpProvider = new Web3.providers.HttpProvider("<ETH_NODE_URL>");
+const tokens = [];
 
 // Authorise
-const coinbasePro = coinbaseProConnect.withApiKeys({
-  apiKey: "XXX",
-  apiSecret: "YYY",
-  passphrase: "ZZZ",
-});
+const ethereum = ethereumConnect({
+  web3: new Web3(httpProvider),
+  tokens: [],
+}).withWallet("<WALLET_ADDRESS>");
 
 // Get balances
-const balances = await coinbasePro.getBalances();
+const balances = await ethereum.getBalances();
 ```

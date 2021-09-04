@@ -1,8 +1,8 @@
-import { AuthMethodCredentials } from "@crypto-connect/common";
+import { AuthMethodCredentials, CryptoConnect } from "@crypto-connect/common";
 import { Binance } from "./Binance";
 import { BinanceApiKeys } from "./BinanceApiKeys";
 
-const binanceConnect = {
+const binanceConnect: CryptoConnect<void, Binance> = () => ({
   /**
    * Use the `ApiKeys` auth method to authorize requests
    */
@@ -10,6 +10,6 @@ const binanceConnect = {
     const auth = new BinanceApiKeys().setCredentials(credentials);
     return new Binance(auth);
   },
-};
+});
 
 export default binanceConnect;

@@ -12,7 +12,7 @@
 import binanceConnect from "@crypto-connect/binance";
 
 // Authorise
-const binance = binanceConnect.withApiKeys({
+const binance = binanceConnect().withApiKeys({
   apiKey: "XXX",
   apiSecret: "YYY",
 });

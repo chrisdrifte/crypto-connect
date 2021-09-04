@@ -12,7 +12,7 @@ import { readCredentialsFile } from "@crypto-connect/common";
 const [apiKey, apiSecret] = readCredentialsFile(`${__dirname}/.keys`);
 
 const setup = () => ({
-  kraken: krakenConnect.withApiKeys({
+  kraken: krakenConnect().withApiKeys({
     apiKey,
     apiSecret,
   }),

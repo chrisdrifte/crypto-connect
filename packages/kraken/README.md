@@ -12,7 +12,7 @@
 import krakenConnect from "@crypto-connect/kraken";
 
 // Authorise
-const kraken = krakenConnect.withApiKeys({
+const kraken = krakenConnect().withApiKeys({
   apiKey: "XXX",
   apiSecret: "YYY",
 });
