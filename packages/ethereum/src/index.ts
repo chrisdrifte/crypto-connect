@@ -1,17 +1,18 @@
+import { CryptoConnect } from "@crypto-connect/common";
 import { Ethereum } from "./Ethereum";
-import { EthereumToken } from "./ethereum-types";
+import { EthereumConfig } from "./ethereum-types";
 
-const ethereumConnect = {
+type EthereumBaseConfig = Omit<EthereumConfig, "walletAddress">;
+
+const ethereumConnect: CryptoConnect<EthereumBaseConfig, Ethereum> = (
+  config,
+) => ({
   /**
    * Use provider url to an ethereum node
    */
-  withProvider(
-    walletAddress: string,
-    provider: string,
-    tokens: EthereumToken[],
-  ): Ethereum {
-    return new Ethereum(walletAddress, provider, tokens);
+  withWallet(walletAddress: EthereumConfig["walletAddress"]): Ethereum {
+    return new Ethereum({ ...config, walletAddress });
   },
-};
+});
 
 export default ethereumConnect;
