@@ -14,7 +14,7 @@ const [apiKey, apiSecret, passphrase] = readCredentialsFile(
 );
 
 const setup = () => ({
-  coinbasePro: coinbaseProConnect.withApiKeys({
+  coinbasePro: coinbaseProConnect().withApiKeys({
     apiKey,
     apiSecret,
     passphrase,

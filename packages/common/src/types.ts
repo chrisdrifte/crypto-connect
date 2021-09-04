@@ -1,4 +1,11 @@
 /**
+ * Crypto Connect Objects
+ */
+export type CryptoConnect<TConfig, THandler> = (
+  config: TConfig,
+) => Record<string, (...args: any[]) => THandler>;
+
+/**
  * Methods required by all connections
  */
 export interface BaseConnectionInterface {

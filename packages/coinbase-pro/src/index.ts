@@ -1,8 +1,8 @@
-import { AuthMethodCredentials } from "@crypto-connect/common";
+import { AuthMethodCredentials, CryptoConnect } from "@crypto-connect/common";
 import { CoinbasePro } from "./CoinbasePro";
 import { CoinbaseProApiKeys } from "./CoinbaseProApiKeys";
 
-const coinbaseProConnect = {
+const coinbaseProConnect: CryptoConnect<void, CoinbasePro> = () => ({
   /**
    * Use the `ApiKeys` auth method to authorize requests
    */
@@ -12,6 +12,10 @@ const coinbaseProConnect = {
     const auth = new CoinbaseProApiKeys().setCredentials(credentials);
     return new CoinbasePro(auth);
   },
-};
+});
 
 export default coinbaseProConnect;
+
+type test = CryptoConnect<void, CoinbasePro>;
+
+let testVar: test;

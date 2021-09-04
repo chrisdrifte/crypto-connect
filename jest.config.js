@@ -8,8 +8,9 @@ module.exports = {
     "<rootDir>/packages/binance",
     "<rootDir>/packages/coinbase-pro",
     "<rootDir>/packages/coinbase",
-    "<rootDir>/packages/kraken",
     "<rootDir>/packages/common",
     "<rootDir>/packages/errors",
+    "<rootDir>/packages/ethereum",
+    "<rootDir>/packages/kraken",
   ],
 };
